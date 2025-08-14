@@ -18,8 +18,9 @@ public abstract class MenuObjRepo extends BasePage {
 	@FindBy(xpath = "//li[@class='navigation_menu_list home']")
 	protected WebElement homeMenu ;
 	
-	@FindBy(xpath = "//div[@class='carousel_inner_wrpr']")
+	@FindBy(xpath = "//a[@class='carousel_banner swiper-slide swiper-slide-active']")
 	protected WebElement banners;
+	
 	
 	@FindBy(xpath = "//li[@class='navigation_menu_list new-arrivals']")
 	protected WebElement newArrivalMenu;
@@ -49,6 +50,7 @@ public abstract class MenuObjRepo extends BasePage {
 	protected WebElement bossLadyPage;
 	
 	@FindBy(xpath = "//div[@class='navigation_cta_icon_list get_updates_icon']")
+	//div[@class='navigation_cta_icon_list get_updates_icon']
 	protected WebElement getUpdateMenu;
 	
 	@FindBy(xpath = "//li[@class='navigation_menu_list nav_menu_dropdown shop']")

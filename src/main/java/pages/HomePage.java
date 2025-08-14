@@ -31,25 +31,26 @@ public final class HomePage extends HomePageObjRepo {
 	}
 	public void homeLaunch() {
 		driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-		type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-		click(submit);
+		//		type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+		//		click(submit);
 		popup();
-		
+
 
 	}
-	 private void popup() {
-			try {
-				WebElement popUp = driver.findElement(By.xpath("(//button[@class='close-btn'])[1]"));
-				
-				if (popUp.isDisplayed()) {
-					popUp.click();
-				}
-				
-			} catch (Exception e) {
-				
+	public void popup() {
+		try {
+			WebElement popUp = driver.findElement(By.xpath("//button[@class='close-btn']"));
+			Common.waitForElement(5);
+
+			if (popUp.isDisplayed()) {
+				popUp.click();
 			}
-			
+
+		} catch (Exception e) {
+
 		}
+
+	}
 	public void scrollToElementUsingJSE(WebElement ele) {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		js.executeScript("arguments[0].scrollIntoView();", ele);
@@ -66,20 +67,20 @@ public final class HomePage extends HomePageObjRepo {
 		homeLaunch();
 		Common.waitForElement(5);
 		click(banners);
-//		WebElement bannerRedirection = driver.findElement(By.xpath("//h3[@class='prod_list_topic']"));
-//		if (bannerRedirection.isDisplayed()) {
-//			String pageHeading = bannerRedirection.getText();
-//			System.out.println("Banner Redirected sucessfull: " +pageHeading);
-//			Assert.assertTrue(verifyDisplayed(bannerRedirection));
-//
-//		}
+		//		WebElement bannerRedirection = driver.findElement(By.xpath("//h3[@class='prod_list_topic']"));
+		//		if (bannerRedirection.isDisplayed()) {
+		//			String pageHeading = bannerRedirection.getText();
+		//			System.out.println("Banner Redirected sucessfull: " +pageHeading);
+		//			Assert.assertTrue(verifyDisplayed(bannerRedirection));
+		//
+		//		}
 	}
 	public void forAndbackButton() {
 		homeLaunch();
 		try {
 			Actions action = new Actions(driver);
-			WebElement bannerNxtBtn = driver.findElement(By.xpath("//div[@class='carousel_banner_next_btn']"));
-			WebElement bannerPrevBtn = driver.findElement(By.xpath("//div[@class='carousel_banner_prev_btn']"));
+			WebElement bannerNxtBtn = driver.findElement(By.xpath("//*[@class='carousel_banner_prev_btn']"));
+			WebElement bannerPrevBtn = driver.findElement(By.xpath("//*[@class='carousel_banner_next_btn']"));
 
 			int maxClicks = 5; // Define the maximum number of clicks
 
@@ -440,7 +441,7 @@ public final class HomePage extends HomePageObjRepo {
 		homeLaunch();
 		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 6200);");
 		Common.waitForElement(1);
-		WebElement whatsApp = driver.findElement(By.xpath("//div[@class='whatsapp_icons']"));
+		WebElement whatsApp = driver.findElement(By.xpath("//div[@class='whatsapp_icons ']"));
 		try {
 			if (whatsApp.isDisplayed()) {
 				click(whatsApp);
@@ -455,105 +456,105 @@ public final class HomePage extends HomePageObjRepo {
 
 
 	}
-//	public void featureOn() {
-//
-//		homeLaunch();
-//		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 7000);");
-//		
-//		try {
-//
-//			List<WebElement> clickRandomFeatureOn = driver.findElements(By.xpath("//div[@class='featured__slider__main']//div[@class='swiper-slide']"));
-//			if (clickRandomFeatureOn.isEmpty()) {
-//				System.out.println("No Feature on section found. ");
-//				return;
-//			}
-//
-//			WebElement randomFeature = clickRandomFeatureOn.get(0);
-//			Collections.shuffle(clickRandomFeatureOn);
-//			clickUsingJavaScript(randomFeature);
-//			Common.waitForElement(5);
-//			WebElement FeatureOnRedirection = driver.findElement(By.xpath("//h3[@class='prod_list_topic']"));
-//			if (FeatureOnRedirection.isDisplayed()) {
-//				String pageHeading = FeatureOnRedirection.getText();
-//				System.out.println("Feature On Redirected sucessfull: " + pageHeading);
-//				Assert.assertTrue(verifyDisplayed(FeatureOnRedirection));
-// }
-//			else {
-//				Common.waitForElement(5);
-//				WebElement feature = driver.findElement(By.xpath("//h2[contains(text(),'Feature On')]"));
-//				String featureOn =feature.getText();
-//				System.out.println("The feature on redirecting on the same page " + featureOn);
-//				Assert.assertTrue(verifyDisplayed(feature));
-//			}
-//
-//
-//		} catch (Exception e) {
-//			System.err.println("Exception in Feature On Section : " + e.getMessage());
-//			throw e;
-//		}
-//
-//
-//	}
+	//	public void featureOn() {
+	//
+	//		homeLaunch();
+	//		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 7000);");
+	//		
+	//		try {
+	//
+	//			List<WebElement> clickRandomFeatureOn = driver.findElements(By.xpath("//div[@class='featured__slider__main']//div[@class='swiper-slide']"));
+	//			if (clickRandomFeatureOn.isEmpty()) {
+	//				System.out.println("No Feature on section found. ");
+	//				return;
+	//			}
+	//
+	//			WebElement randomFeature = clickRandomFeatureOn.get(0);
+	//			Collections.shuffle(clickRandomFeatureOn);
+	//			clickUsingJavaScript(randomFeature);
+	//			Common.waitForElement(5);
+	//			WebElement FeatureOnRedirection = driver.findElement(By.xpath("//h3[@class='prod_list_topic']"));
+	//			if (FeatureOnRedirection.isDisplayed()) {
+	//				String pageHeading = FeatureOnRedirection.getText();
+	//				System.out.println("Feature On Redirected sucessfull: " + pageHeading);
+	//				Assert.assertTrue(verifyDisplayed(FeatureOnRedirection));
+	// }
+	//			else {
+	//				Common.waitForElement(5);
+	//				WebElement feature = driver.findElement(By.xpath("//h2[contains(text(),'Feature On')]"));
+	//				String featureOn =feature.getText();
+	//				System.out.println("The feature on redirecting on the same page " + featureOn);
+	//				Assert.assertTrue(verifyDisplayed(feature));
+	//			}
+	//
+	//
+	//		} catch (Exception e) {
+	//			System.err.println("Exception in Feature On Section : " + e.getMessage());
+	//			throw e;
+	//		}
+	//
+	//
+	//	}
 	public void featureOn() {
 
-	    homeLaunch();
-	    ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 7000);");
-	    
-	    try {
+		homeLaunch();
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 7000);");
 
-	        List<WebElement> clickRandomFeatureOn = driver.findElements(By.xpath("//div[@class='featured__slider__main']//div[@class='swiper-slide']"));
-	        if (clickRandomFeatureOn.isEmpty()) {
-	            System.out.println("No Feature on section found. ");
-	            return;
-	        }
+		try {
 
-	        Collections.shuffle(clickRandomFeatureOn);
-	        WebElement randomFeature = clickRandomFeatureOn.get(0);
-	        clickUsingJavaScript(randomFeature);
-	        Common.waitForElement(5);
-	        
-	        List<WebElement> featureOnRedirection = driver.findElements(By.xpath("//h3[@class='prod_list_topic']"));
-	        if (!featureOnRedirection.isEmpty() && featureOnRedirection.get(0).isDisplayed()) {
-	            String pageHeading = featureOnRedirection.get(0).getText();
-	            System.out.println("Feature On Redirected successfully: " + pageHeading);
-	            Assert.assertTrue(verifyDisplayed(featureOnRedirection.get(0)));
-	        }
-	        else {
-	            List<WebElement> feature = driver.findElements(By.xpath("//h2[contains(text(),'Feature On')]"));
-	            if (!feature.isEmpty() && feature.get(0).isDisplayed()) {
-	                String featureOn = feature.get(0).getText();
-	                System.out.println("The feature on redirecting on the same page: " + featureOn);
-	                Assert.assertTrue(verifyDisplayed(feature.get(0)));
-	            } else {
-	                System.out.println("Neither of the expected pages were found.");
-	            }
-	        
-	            WebElement featureOnNxtBtn = driver.findElement(By.xpath("//div[@class='swiper_next__btn']"));
-	            if (featureOnNxtBtn.isDisplayed()) {
-	            	clickUsingJavaScript(featureOnNxtBtn);
-	            	System.out.println("Feature on Next Button clicked");
-					}
-	            WebElement featureOnBackBtn = driver.findElement(By.xpath("//div[@class='swiper_prev__btn']"));
-	            if (featureOnBackBtn.isDisplayed()) {
-	            	clickUsingJavaScript(featureOnBackBtn);
-	            	System.out.println("Feature on Back Button clicked");
-	            
-	        }
-	        }
-	    }
+			List<WebElement> clickRandomFeatureOn = driver.findElements(By.xpath("//div[@class='featured__slider__main']//div[@class='swiper-slide']"));
+			if (clickRandomFeatureOn.isEmpty()) {
+				System.out.println("No Feature on section found. ");
+				return;
+			}
 
-	    catch (Exception e) {
-	        System.out.println("Exception in featureOn: " + e.getMessage());
-	        throw e;
-	    }
+			Collections.shuffle(clickRandomFeatureOn);
+			WebElement randomFeature = clickRandomFeatureOn.get(0);
+			clickUsingJavaScript(randomFeature);
+			Common.waitForElement(5);
+
+			List<WebElement> featureOnRedirection = driver.findElements(By.xpath("//h3[@class='prod_list_topic']"));
+			if (!featureOnRedirection.isEmpty() && featureOnRedirection.get(0).isDisplayed()) {
+				String pageHeading = featureOnRedirection.get(0).getText();
+				System.out.println("Feature On Redirected successfully: " + pageHeading);
+				Assert.assertTrue(verifyDisplayed(featureOnRedirection.get(0)));
+			}
+			else {
+				List<WebElement> feature = driver.findElements(By.xpath("//h2[contains(text(),'Feature On')]"));
+				if (!feature.isEmpty() && feature.get(0).isDisplayed()) {
+					String featureOn = feature.get(0).getText();
+					System.out.println("The feature on redirecting on the same page: " + featureOn);
+					Assert.assertTrue(verifyDisplayed(feature.get(0)));
+				} else {
+					System.out.println("Neither of the expected pages were found.");
+				}
+
+				WebElement featureOnNxtBtn = driver.findElement(By.xpath("//div[@class='swiper_next__btn']"));
+				if (featureOnNxtBtn.isDisplayed()) {
+					clickUsingJavaScript(featureOnNxtBtn);
+					System.out.println("Feature on Next Button clicked");
+				}
+				WebElement featureOnBackBtn = driver.findElement(By.xpath("//div[@class='swiper_prev__btn']"));
+				if (featureOnBackBtn.isDisplayed()) {
+					clickUsingJavaScript(featureOnBackBtn);
+					System.out.println("Feature on Back Button clicked");
+
+				}
+			}
+		}
+
+		catch (Exception e) {
+			System.out.println("Exception in featureOn: " + e.getMessage());
+			throw e;
+		}
 	}
-	
-	
+
+
 
 	public void allsectionHomePage() {
 		homeLaunch();
 		try {
-			
+
 			List<WebElement> elements = driver.findElements(By.xpath("//h2"));
 			for (WebElement element : elements) {
 				System.out.println(element.getText());
@@ -573,7 +574,7 @@ public final class HomePage extends HomePageObjRepo {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	
+
 
 
 	}

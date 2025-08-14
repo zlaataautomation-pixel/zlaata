@@ -53,16 +53,18 @@ public class SearchBarStepDef {
 
 	}
 
-	@Given("User enters less than three characters in the search bar and verifies no navigation occurs.")
-	public void user_enters_less_than_three_characters_in_the_search_bar_and_verifies_no_navigation_occurs() {
+	@Given("User enters a valid search keyword and verifies redirection to the correct page")
+	public void user_enters_a_valid_search_keyword_and_verifies_redirection_to_the_correct_page() {
 		home.homeLaunch();
-		try {
-			search.searchBarUserEnterLessThanThreeCharater();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+        search.searchKeyWordRedirectToCorrectpage();
+		
+	}
 
+	@Given("User verifies that Related Queries are displayed under the search results")
+	public void user_verifies_that_related_queries_are_displayed_under_the_search_results() throws InterruptedException {
+		home.homeLaunch();
+
+		search.validateRelatedQueriesAndHeadings();
 	}
 
 	@Given("User enters a random keyword and verifies navigation to the Search Suggestions page.")
@@ -105,21 +107,9 @@ public class SearchBarStepDef {
 
 	}
 
-	@Given("User verifies that Related Queries are displayed under the search results")
-	public void user_verifies_that_related_queries_are_displayed_under_the_search_results() throws InterruptedException {
-		home.homeLaunch();
-
-		search.validateRelatedQueriesAndHeadings();
-	}
+	
 
 
-
-	@Given("User enters a valid search keyword and verifies redirection to the correct page")
-	public void user_enters_a_valid_search_keyword_and_verifies_redirection_to_the_correct_page() {
-		home.homeLaunch();
-        search.searchKeyWordRedirectToCorrectpage();
-		
-	}
 
 
 

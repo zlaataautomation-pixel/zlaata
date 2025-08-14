@@ -9,11 +9,13 @@ import basePage.BasePage;
 
 public abstract class SearchBarObjRepo extends BasePage {
 
-	@FindBy(xpath = "//input[@class='navigation_search_input_field']")
+	@FindBy(xpath = "//div[@class='navigation_search_input_box']")
 	protected WebElement searchBarInput;
 	
-	@FindBy(xpath = "//div[@class='navigation_search_input_box active']")
+	@FindBy(xpath = "//input[@class='navigation_search_input_field Cls_redirect_restrict']")
 	protected WebElement searchbaractive;
+	
+	
 
 	@FindBy(xpath = "//h5[.='TRENDINGS']")
 	protected WebElement headingTrendings;
@@ -66,9 +68,12 @@ public abstract class SearchBarObjRepo extends BasePage {
 	
 	@FindBy(xpath = "//h6[@class='nav_search_result_prod_name']")
 	protected WebElement recentlyViwedProduct;
-	
+//	
 	@FindBy(xpath = "//h2[@class='product_list_cards_heading']")
 	protected WebElement productName;
+	
+	
+	
 	
 	@FindBy(xpath = "//div[@class='product_list_cards_img_box']")
 	protected WebElement productListingImage;

@@ -10,9 +10,9 @@ import pages.ProductDetailsPage;
 public class ProductDetailsStepDef {
 	TestContext testContext;
 	ProductDetailsPage pDP;
-    WebDriver driver;
-    HomePage home;
-    
+	WebDriver driver;
+	HomePage home;
+
 
 	public ProductDetailsStepDef(TestContext context) {
 		testContext = context;
@@ -43,7 +43,7 @@ public class ProductDetailsStepDef {
 
 	@Given("User Verifies Wishlist Button Functionality on Product details page #excel need to update")
 	public void user_verifies_wishlist_button_functionality_on_product_details_page_excel_need_to_update() {
-		
+
 		pDP.wishList();
 	}
 
@@ -79,11 +79,23 @@ public class ProductDetailsStepDef {
 		pDP.verifySizeOptions();
 	}
 
+	//
+	//	@Given("User Verifies {string} Section")
+	//	public void user_verifies_section(String string) {
+	//		pDP.askUsAnything(Hooks.getScenario());
+	//	}
 
-	@Given("User Verifies {string} Section")
-	public void user_verifies_section(String string) {
-		pDP.askUsAnything(Hooks.getScenario());
+	@Given("User verifies that the category name is displayed on the Product Details Page")
+	public void user_verifies_that_the_category_name_is_displayed_on_the_product_details_page() {
+		
+		home.homeLaunch();
+		pDP.categoryName();
+		
+		
 	}
+
+
+
 
 	@Given("User Verifies {string} Button Functionality on Product details page #excel need to update")
 	public void user_verifies_button_functionality_on_product_details_page_excel_need_to_update(String string) {
@@ -175,7 +187,7 @@ public class ProductDetailsStepDef {
 
 	@Given("User Verifies Display of Recently Viewed Section")
 	public void user_verifies_display_of_recently_viewed_section() {
-		
+
 		pDP.recentlyViewed();
 	}
 

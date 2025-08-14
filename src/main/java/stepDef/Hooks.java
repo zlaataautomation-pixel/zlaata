@@ -3,6 +3,8 @@ package stepDef;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import org.openqa.selenium.OutputType;
@@ -15,16 +17,16 @@ import context.Context;
 import context.TestContext;
 import dataProviders.TestData;
 import manager.FileReaderManager;
-import utils.Common;
-import utils.DateUtils;
-import utils.EmailSendUtils;
-import utils.ExcelUtils;
+import utils.*;
+import utils.ExcelReportUtil.TestResult;
 import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 
@@ -45,15 +47,32 @@ public class Hooks {
 	public static Scenario myScenario;
 	public static WebDriver driver;
 	private static Scenario scenario;
-	
+	private long startTime;
+	public static ThreadLocal<Throwable> lastError = new ThreadLocal<>();
 
-
+	private String extractFeatureName(Scenario scenario) {
+        try {
+            // Example: "features/signup.feature:5"
+            String id = scenario.getId();
+            if (id != null && id.contains(":")) {
+                String path = id.split(":")[0]; // features/signup.feature
+                String[] parts = path.replace("\\", "/").split("/");
+                String nameWithExt = parts[parts.length - 1]; // signup.feature
+                
+                return nameWithExt.replace(".feature", "").trim(); // signup
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "UnknownFeature";
+    }
 
 
 	@Before(order=0)
 	public void preCondition(Scenario scenario) throws IOException {
 		
-		
+		 
+	    
 //		myScenario = scenario;
 //		try {
 //	        if (driver != null) {
@@ -90,6 +109,10 @@ public class Hooks {
 	    System.out.println("\n---------------------------------------------------");
 	    System.out.println("Starting scenario: " + scenario.getName());
 	    Hooks.scenario = scenario;
+	    startTime = System.currentTimeMillis();
+	    String featureName = scenario.getUri().toString().split("/")[scenario.getUri().toString().split("/").length - 1];
+	    ExcelReportUtil.executedFeatures.add(featureName.replace(".feature", ""));
+	
 	}
 	public static Scenario getScenario() {
         return scenario;
@@ -196,17 +219,27 @@ public class Hooks {
 	
 	
 
-	@After
+	@After(order=1)
 	public void afterScenario(Scenario scenario) {
 		
 		
+
+//			System.out.println("\n---------------------------------------------------");
+//	        System.out.println("\u001B[31m" + "Scenario failed: " + scenario.getName() + "\u001B[0m");
+//	        System.out.println("---------------------------------------------------\n");
+			String feature= "src/test/resources/features";
+			String scenarios = scenario.getName();
+			String statuses = String.valueOf(scenario.getStatus());
+
+
+            try {
+                ExcelReportUtils.writeTestResult(feature,scenarios,null,statuses,null,"Null");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 		if (scenario.isFailed()) {
-			System.out.println("\n---------------------------------------------------");
-	        System.out.println("\u001B[31m" + "Scenario failed: " + scenario.getName() + "\u001B[0m");
-	        System.out.println("---------------------------------------------------\n");
-	       
-	       
-	        try {
+
+            try {
 		        if (driver != null) {
 		            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 		            scenario.attach(screenshot, "image/png", "Initial Screenshot");
@@ -231,12 +264,77 @@ public class Hooks {
 	}
 	
 	
-	@After(order = 1)
+	@After(order = 2)
 	public void tearDown() throws IOException {
 		testContext.getWebDriverManager().closeDriver();
-		EmailSendUtils.sendEmail();
 
 	}
+	
+	@AfterStep
+	public void afterStep(Scenario scenario) {
+	    if (scenario.isFailed()) {
+	        try {
+	            throw new Exception("Step failed");
+	        } catch (Exception e) {
+	            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+	            for (StackTraceElement element : stackTrace) {
+	                if (element.getClassName().contains("StepDefs")) { // adjust as per your package
+	                    ExceptionTracker.lastError.set(e);
+	                    break;
+	                }
+	            }
+	        }
+	    }
+	}
+	
+	@After
+	public void tearDown(Scenario scenario) {
+	    long endTime = System.currentTimeMillis();
+	    double duration = (endTime - startTime) / 1000.0;
+
+	    String testCaseId = scenario.getSourceTagNames().stream()
+	            .filter(tag -> tag.startsWith("@TC"))
+	            .findFirst()
+	            .orElse("@NA").substring(1);
+
+	    String testCaseName = scenario.getName();
+	    String executedBy = System.getProperty("user.name", "QA");
+	    String status = scenario.isFailed() ? "Fail" : "Pass";
+
+	    String screenshotPath = null;
+	    if (scenario.isFailed()) {
+	        screenshotPath = ExcelReportUtil.captureScreenshot(driver, testCaseId);
+	    }
+
+	    String errorMessage = "N/A";
+	    if (scenario.isFailed() && ExceptionTracker.lastError.get() != null) {
+	        Throwable t = ExceptionTracker.lastError.get();
+	        errorMessage = getStackTraceAsString(t);
+	    }
+
+	    // Extract feature name
+	    String featureName = scenario.getUri().getPath().replaceAll(".*/", "").replace(".feature", "");
+	    ExcelReportUtil.executedFeatures.add(featureName);
+
+	    ExcelReportUtil.TestResult result = new ExcelReportUtil.TestResult(
+	            testCaseId, testCaseName, duration, executedBy, status, errorMessage, screenshotPath, featureName
+	    );
+
+	    ExcelReportUtil.results.add(result);
+	    ExceptionTracker.lastError.remove();
+	}
+
+	    private String getStackTraceAsString(Throwable t) {
+	        StringWriter sw = new StringWriter();
+	        PrintWriter pw = new PrintWriter(sw);
+	        t.printStackTrace(pw);
+	        return sw.toString();
+	    }
+
+	    // Add this method call where appropriate in your step definitions or hooks
+	    public static void captureException(Throwable t) {
+	        lastError.set(t);
+	    }
 	
 	public static void takeScreenshot() {
 
@@ -248,4 +346,6 @@ public class Hooks {
 	}
 
 }
+
+
 

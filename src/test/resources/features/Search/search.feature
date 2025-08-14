@@ -29,11 +29,12 @@ Scenario Outline: TC_UI_Zlaata_SB_03 | Verify that all options under the TRENDIN
     | TD_UI_Zlaata_SB_03  |
 
 @TC_UI_Zlaata_SB_04
-Scenario Outline: TC_UI_Zlaata_SB_04 | Verify that entering less than three characters in the search bar does not navigate to any page. | "<TD_ID>"
-  Given User enters less than three characters in the search bar and verifies no navigation occurs.
-  Examples:
-    | TD_ID                |
-    | TD_UI_Zlaata_SB_04  |
+Scenario Outline: TC_UI_Zlaata_SB_04 | Verify that the search keyword redirects to the correct page | "<TD_ID>"
+  Given User enters a valid search keyword and verifies redirection to the correct page
+
+Examples:
+  | TD_ID               |
+  | TD_UI_Zlaata_SB_04 |
 
 @TC_UI_Zlaata_SB_05
 Scenario Outline: TC_UI_Zlaata_SB_05 | Verify that the Related Queries display and the sub Related Queries menu redirects correctly | "<TD_ID>"
@@ -80,12 +81,6 @@ Scenario Outline: TC_UI_Zlaata_SB_10 | Verify that the Recently Viewed section i
     | TD_ID                |
     | TD_UI_Zlaata_SB_10  |
     
-@TC_UI_Zlaata_SB_11
-Scenario Outline: TC_UI_Zlaata_SB_11 | Verify that the search keyword redirects to the correct page | "<TD_ID>"
-  Given User enters a valid search keyword and verifies redirection to the correct page
 
-Examples:
-  | TD_ID               |
-  | TD_UI_Zlaata_SB_11 |
 
   

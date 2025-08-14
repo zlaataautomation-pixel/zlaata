@@ -24,7 +24,7 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 			Common.waitForElement(5);
 			Actions actions = new Actions(driver);
 	
-			WebElement bagIcon = driver.findElement(By.xpath("//button[@class='Cls_cart_btn']"));
+			WebElement bagIcon = driver.findElement(By.xpath("//button[@class='Cls_cart_btn Cls_redirect_restrict']"));
 			bagIcon.click();
 			Common.waitForElement(2);
 	
@@ -46,7 +46,7 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 					WebElement addToCart = driver.findElement(By.xpath("//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']"));
 					addToCart.click();
 					Common.waitForElement(5);
-					driver.findElement(By.xpath("//button[@class='Cls_cart_btn Cls_redirect_restrict']")).click();
+					driver.findElement(By.xpath("//button[@class='Cls_cart_btn']")).click();
 					Common.waitForElement(2);
 				}
 			}
@@ -169,8 +169,8 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 			double finalPayable = finalAmount;
 			double actualTotalMrp = expectedTotalMrp; 
 			double actualDiscountedMrp = expectedTotalDiscounted;
-			int earnedThreads = ((int) (finalPayable - giftWrap - express - custom) / 500) * 10;
-			int actualEarnedThreads = ((int) (finalPayable - giftWrap - express - custom) / 500) * 10;
+//			int earnedThreads = ((int) (finalPayable - giftWrap - express - custom) / 500) * 10;
+//			int actualEarnedThreads = ((int) (finalPayable - giftWrap - express - custom) / 500) * 10;
 	
 			System.out.println("============= Checkout Summary ==================================");	
 			System.out.println("Expected Total MRP: Rs. " + expectedTotalMrp + " || Actual Total MRP: Rs. " + actualTotalMrp + " || " + (expectedTotalMrp == actualTotalMrp ? "\u001B[32mMatched\u001B[0m" : "\u001B[31mMismatch\u001B[0m"));
@@ -178,7 +178,7 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 			System.out.println("Gift Wrap: Rs. " + giftWrap);
 			System.out.println("Express Delivery: Rs. " + express);
 			System.out.println("Customization Charges: Rs. " + custom);
-			System.out.println("Expected Earned Threads: " + earnedThreads + " || Actual Earned Threads: " + actualEarnedThreads + " || " + (earnedThreads == actualEarnedThreads ? "\u001B[32mMatched\u001B[0m" : "\u001B[31mMismatch\u001B[0m"));
+//			System.out.println("Expected Earned Threads: " + earnedThreads + " || Actual Earned Threads: " + actualEarnedThreads + " || " + (earnedThreads == actualEarnedThreads ? "\u001B[32mMatched\u001B[0m" : "\u001B[31mMismatch\u001B[0m"));
 			System.out.println("Flat ₹50 Discount Applied: Rs. " + flatDiscount);
 			System.out.println("Thread Discount Applied: Rs. " + threadsApplied);
 			System.out.println("Coupon Discount Applied: Rs. " + couponDiscount);

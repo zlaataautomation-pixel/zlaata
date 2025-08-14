@@ -17,12 +17,12 @@ import utils.DateUtils;
 
 public final class NegativeSignupPages extends SignupObjRepository {
 private WebDriver driver;
-	
 
 	public NegativeSignupPages(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(this.driver, this);
 	}
+
 
 
 	protected boolean isAt() {
@@ -33,13 +33,15 @@ private WebDriver driver;
 	public void launchZltV7() {
 	
         driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-        click(submit);
+//        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+//        click(submit);
         popup();
     }
 	private void popup() {
 		try {
-			WebElement popUp = driver.findElement(By.xpath("(//button[@class='close-btn'])[1]"));
+			WebElement popUp = driver.findElement(By.xpath("//button[@class='close-btn']"));
+			Common.waitForElement(5);
+			
 			
 			if (popUp.isDisplayed()) {
 				popUp.click();
@@ -219,7 +221,7 @@ private WebDriver driver;
 	    contbtn();
 //	    Common.waitForElement(5);
 	    String uiData = number.getAttribute("value");
-	    String actualMessage = alreadyUsedNumber.getText();
+	    String actualMessage = validationMsgNumber.getText();
 	    System.out.println("📤 Application UI Data: " + uiData + " | Length: " + uiData.length());
 //	    System.out.println("📤 Validation Message: " + actualMessage);
 	    System.out.println("\u001B[32m📤 Validation Message: " + actualMessage + "\u001B[0m");
@@ -333,6 +335,12 @@ public void leftAllMandatory() {
 	}
 	
 	public void invalidOTP() {
+		
+		
+		
+		String excelData = Common.getValueFromTestDataMap("Mobile Number");
+	    System.out.println("📥 Excel Data: " + excelData + " | Length: " + excelData.length());
+	    type(number, excelData);
 	    String value = Common.getValueFromTestDataMap("OTP");
 	    contbtn();
 	    Common.waitForElement(5);

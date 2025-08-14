@@ -25,8 +25,8 @@ public final class LoginPage extends LoginObjRepository {
 
     public void userLogin() {
         driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-        click(submit);
+//        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+//        click(submit);
         popup();
         Common.waitForElement(1);
         click(profile);
@@ -34,9 +34,8 @@ public final class LoginPage extends LoginObjRepository {
         type(loginNumber, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Number"));
         Common.waitForElement(1);
         click(sendotp);
-        Common.waitForElement(1);
-        type(enterotp, FileReaderManager.getInstance().getJsonReader().getValueFromJson("OTP"));
-        Common.waitForElement(1);
+//        Common.waitForElement(35);
+      type(enterotp, FileReaderManager.getInstance().getJsonReader().getValueFromJson("OTP"));
         click(verifyotp);
         Common.waitForElement(3); // small buffer
 
@@ -48,7 +47,9 @@ public final class LoginPage extends LoginObjRepository {
         }
     private void popup() {
 		try {
-			WebElement popUp = driver.findElement(By.xpath("(//button[@class='close-btn'])[1]"));
+			WebElement popUp = driver.findElement(By.xpath("//button[@class='close-btn']"));
+			Common.waitForElement(5);
+			
 			
 			if (popUp.isDisplayed()) {
 				popUp.click();

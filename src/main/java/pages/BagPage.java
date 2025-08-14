@@ -1039,162 +1039,149 @@ public final class BagPage extends BagObjRepo {
 	}
 
 	public void youSavedandTotalAmountCalculationBasedOnQTY() throws InterruptedException {
-		HomePage home = new HomePage(driver);
-		home.homeLaunch();
-		Common.waitForElement(5);
-		click(bagIcon);
+	    HomePage home = new HomePage(driver);
+	    home.homeLaunch();
+	    Common.waitForElement(3);
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//	    // If bag empty, add a product
+//	    List<WebElement> products = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
+//	    if (products.isEmpty()) {
+//	        System.out.println(" Bag is empty. Adding product...");
+//	        click(closeBag);
+	        Actions actions = new Actions(driver);
+	        actions.moveToElement(shopMenu).moveToElement(category).click().build().perform();
+	        List<WebElement> addProduct = driver.findElements(By.xpath("//button[@class='product_list_cards_btn']"));
+	        Collections.shuffle(addProduct);
+	        if (!addProduct.isEmpty()) {
+	            WebElement randomProduct = addProduct.get(0);
+	            actions.moveToElement(randomProduct).click().build().perform();
+	            click(addToCart);
+	            click(bagIcon);
+	    	    Common.waitForElement(3);
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		// If bag empty, add a product
-		List<WebElement> products = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
-		if (products.isEmpty()) {
-			System.out.println(" Bag is empty. Adding product...");
-			click(closeBag);
-			Actions actions = new Actions(driver);
-			actions.moveToElement(shopMenu).moveToElement(category).click().build().perform();
-
-			List<WebElement> addProduct = driver.findElements(By.xpath("//button[@class='product_list_cards_btn']"));
-			Collections.shuffle(addProduct);
-			if (!addProduct.isEmpty()) {
-				WebElement randomProduct = addProduct.get(0);
-				actions.moveToElement(randomProduct).click().build().perform();
-				click(addToCart);
-				click(bagIcon);
-			}
-		}
-
-
-		// Lambda or function wrappers to get product data freshly from DOM each time:
-		java.util.function.Function<Integer, Integer> getQuantity = index -> {
-			String text = getElementTextWithRetry(By.xpath("//div[@class='cart_prod_card ']"),
-					By.xpath(".//div[@class='cp_quantity_wrap']"), index);
-			return Integer.parseInt(text);
-		};
-
-		java.util.function.Function<Integer, Integer> getActualPrice = index -> {
-			String text = getElementTextWithRetry(By.xpath("//div[@class='cart_prod_card ']"),
-					By.xpath(".//div[@class='cp_actual_price']"), index);
-			return Integer.parseInt(text.replaceAll("[^0-9]", ""));
-		};
-
-		java.util.function.Function<Integer, Integer> getDiscountedPrice = index -> {
-			String text = getElementTextWithRetry(By.xpath("//div[@class='cart_prod_card ']"),
-					By.xpath(".//div[@class='cp_current_price']"), index);
-			return Integer.parseInt(text.replaceAll("[^0-9]", ""));
-		};
-
-		// Function to print summary of products
-		java.util.function.Consumer<String> printSummary = label -> {
-			System.out.println("\n" + label);
-			List<WebElement> prods = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
-			int totalYouSaved = 0;
-			int totalDiscounted = 0;
-
-			for (int i = 0; i < prods.size(); i++) {
-				final int index = i;
-				int quantity = getQuantity.apply(index);
-				int actualPrice = getActualPrice.apply(index);
-				int discountedPrice = getDiscountedPrice.apply(index);
-
-				int youSaved = (actualPrice - discountedPrice) * quantity;
-				int discountedTotal = discountedPrice * quantity;
-
-				totalYouSaved += youSaved;
-				totalDiscounted += discountedTotal;
-
-				System.out.println("---------------------------------------------------");
-				System.out.println("Product " + (i + 1));
-				System.out.println(" - Quantity: " + quantity);
-				System.out.println(" - Actual Price: Rs. " + actualPrice);
-				System.out.println(" - Discounted Price: Rs. " + discountedPrice);
-				System.out.println(" - Expected 'You Saved': Rs. " + youSaved + " Actual you saved : Rs. " + youSaved + " /-");
-				System.out.println(" - Expected Discounted Total: Rs. " + discountedTotal + " Actual Total Amount : Rs. " + discountedTotal + " /-");
-			}
-
-			System.out.println("\n " + label + " - Grand Totals:");
-			System.out.println("Expected Total 'You Saved': Rs. " + totalYouSaved + ", Actual you saved: Rs. " + totalYouSaved);
-			System.out.println("Expected Total Amount: Rs. " + totalDiscounted + ", Actual Total Amount: Rs. " + totalDiscounted);
-			System.out.println("---------------------------------------------------");
-		};
-
-		// Print initial summary
-		printSummary.accept(" Initial Product Summary");
-
-		// Increase quantity for each product
-		List<WebElement> productsBeforeIncrease = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
-
-		for (int i = 0; i < productsBeforeIncrease.size(); i++) {
-			final int index = i;
-			WebElement product = productsBeforeIncrease.get(index);
-			WebElement incBtn = product.findElement(By.xpath(".//button[contains(@class,'cp_quantity_increase_btn')]"));
-
-			int oldQty = getQuantity.apply(index);
-			incBtn.click();
-
-			int expectedQty = oldQty + 1;
-			wait.until(driver -> {
-				try {
-					int currentQty = getQuantity.apply(index);
-					return currentQty == expectedQty;
-				} catch (Exception e) {
-					return false;
-				}
-			});
-		}
-
-		// After increase, print summary
-		printSummary.accept(" After Increasing Quantity");
-
-		// Decrease quantity back to original
-		List<WebElement> productsBeforeDecrease = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
-
-		for (int i = 0; i < productsBeforeDecrease.size(); i++) {
-			final int index = i;
-			WebElement product = productsBeforeDecrease.get(index);
-			WebElement decBtn = product.findElement(By.xpath(".//button[contains(@class,'cp_quantity_decrease_btn')]"));
-
-			int oldQty = getQuantity.apply(index);
-			decBtn.click();
-
-			int expectedQty = oldQty - 1;
-			wait.until(driver -> {
-				try {
-					int currentQty = getQuantity.apply(index);
-					return currentQty == expectedQty;
-				} catch (Exception e) {
-					return false;
-				}
-			});
-		}
-
-		// After decrease, print final summary
-		printSummary.accept(" After Decreasing Back to Original");
+	            
+	        }
+	    
+	    // Lambda or function wrappers to get product data freshly from DOM each time:
+	    java.util.function.Function<Integer, Integer> getQuantity = index -> {
+	        String text = getElementTextWithRetry(By.xpath("//div[@class='cart_prod_card ']"),
+	                By.xpath(".//div[@class='cp_quantity_wrap']"), index);
+	        return Integer.parseInt(text);
+	    };
+	    java.util.function.Function<Integer, Integer> getActualPrice = index -> {
+	        String text = getElementTextWithRetry(By.xpath("//div[@class='cart_prod_card ']"),
+	                By.xpath(".//div[@class='cp_actual_price']"), index);
+	        return Integer.parseInt(text.replaceAll("[^0-9]", ""));
+	    };
+	    java.util.function.Function<Integer, Integer> getDiscountedPrice = index -> {
+	        String text = getElementTextWithRetry(By.xpath("//div[@class='cart_prod_card ']"),
+	                By.xpath(".//span[contains(@class,'cp_current_price') or contains(@class,'product_list_cards_actual_price_txt')]"), index);
+	        return Integer.parseInt(text.replaceAll("[^0-9]", ""));
+	    };
+	    // Function to print summary of products
+	    java.util.function.Consumer<String> printSummary = label -> {
+	        System.out.println("\n" + label);
+	        List<WebElement> prods = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
+	        int totalYouSaved = 0;
+	        int totalDiscounted = 0;
+	        for (int i = 0; i < prods.size(); i++) {
+	            final int index = i;
+	            int quantity = getQuantity.apply(index);
+	            int actualPrice = getActualPrice.apply(index);
+	            int discountedPrice = getDiscountedPrice.apply(index);
+	            int youSaved = (actualPrice - discountedPrice) * quantity;
+	            int discountedTotal = discountedPrice * quantity;
+	            totalYouSaved += youSaved;
+	            totalDiscounted += discountedTotal;
+	            System.out.println("---------------------------------------------------");
+	            System.out.println("Product " + (i + 1));
+	            System.out.println(" - Quantity: " + quantity);
+	            System.out.println(" - Actual Price: Rs. " + actualPrice);
+	            System.out.println(" - Discounted Price: Rs. " + discountedPrice);
+	            System.out.println(" - Expected 'You Saved': Rs. " + youSaved + " Actual you saved : Rs. " + youSaved + " /-");
+	            System.out.println(" - Expected Discounted Total: Rs. " + discountedTotal + " Actual Total Amount : Rs. " + discountedTotal + " /-");
+	        }
+	        System.out.println("\n " + label + " - Grand Totals:");
+	        System.out.println("Expected Total 'You Saved': Rs. " + totalYouSaved + ", Actual you saved: Rs. " + totalYouSaved);
+	        System.out.println("Expected Total Amount: Rs. " + totalDiscounted + ", Actual Total Amount: Rs. " + totalDiscounted);
+	        System.out.println("---------------------------------------------------");
+	    };
+	    // Print initial summary
+	    printSummary.accept(" Initial Product Summary");
+	    // Increase quantity for each product
+	    List<WebElement> productsBeforeIncrease = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
+	    for (int i = 0; i < productsBeforeIncrease.size(); i++) {
+	        final int index = i;
+	        WebElement product = driver.findElements(By.xpath("//div[@class='cart_prod_card ']")).get(index);
+	        WebElement incBtn = product.findElement(By.xpath(".//button[contains(@class,'cp_quantity_increase_btn')]"));
+	        int oldQty = getQuantity.apply(index);
+	        incBtn.click();
+	        int expectedQty = oldQty + 1;
+	        wait.until(driver -> {
+	            try {
+	                int currentQty = getQuantity.apply(index);
+	                return currentQty == expectedQty;
+	            } catch (Exception e) {
+	                return false;
+	            }
+	        });
+	    }
+	    // After increase, print summary
+	    printSummary.accept(" After Increasing Quantity");
+	    // Decrease quantity back to original
+	    List<WebElement> productsBeforeDecrease = driver.findElements(By.xpath("//div[@class='cart_prod_card ']"));
+	    for (int i = 0; i < productsBeforeDecrease.size(); i++) {
+	        final int index = i;
+	        WebElement product = productsBeforeDecrease.get(index);
+	        WebElement decBtn = product.findElement(By.xpath(".//button[contains(@class,'cp_quantity_decrease_btn')]"));
+	        int oldQty = getQuantity.apply(index);
+	        decBtn.click();
+	        int expectedQty = oldQty - 1;
+	        wait.until(driver -> {
+	            try {
+	                int currentQty = getQuantity.apply(index);
+	                return currentQty == expectedQty;
+	            } catch (Exception e) {
+	                return false;
+	            }
+	        });
+	    }
+	    // After decrease, print final summary
+	    printSummary.accept(" After Decreasing Back to Original");
 	}
-
 	// Helper method to get text with retries for stale elements
 	private String getElementTextWithRetry(By parentBy, By childBy, int index) {
-		int attempts = 0;
-		while (attempts < 5) {
-			try {
-				List<WebElement> parents = driver.findElements(parentBy);
-				if (parents.size() <= index) {
-					throw new NoSuchElementException("No element at index " + index);
-				}
-				WebElement parent = parents.get(index);
-				WebElement child = parent.findElement(childBy);
-				return child.getText().trim();
-			} catch (StaleElementReferenceException | NoSuchElementException e) {
-				attempts++;
-				try {
-					Thread.sleep(200);  // small wait before retry
-				} catch (InterruptedException ie) {
-					Thread.currentThread().interrupt();
-				}
-			}
-		}
-		throw new RuntimeException("Failed to get element text after 5 retries");
+	    int attempts = 0;
+	    while (attempts < 5) {
+	        try {
+	            List<WebElement> parents = driver.findElements(parentBy);
+	            if (parents.size() <= index) {
+	                throw new NoSuchElementException("No element at index " + index);
+	            }
+	            WebElement parent = parents.get(index);
+	            WebElement child = parent.findElement(childBy);
+	            return child.getText().trim();
+	        } catch (StaleElementReferenceException | NoSuchElementException e) {
+	            attempts++;
+	            try {
+	                Thread.sleep(200);  // small wait before retry
+	            } catch (InterruptedException ie) {
+	                Thread.currentThread().interrupt();
+	            }
+	        }
+	    }
+	    throw new RuntimeException("Failed to get element text after 5 retries");
 	}
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -10,14 +10,14 @@ public class FooterStepdef  {
 	TestContext testContext;
 	FooterPage footer;
 	HomePage home;
-	
-	
+
+
 	public FooterStepdef(TestContext context) {
-        testContext = context;
-        footer = testContext.getPageObjectManager().getFooterPage();
-        home = testContext.getPageObjectManager().getHomePage();
-    }
-	
+		testContext = context;
+		footer = testContext.getPageObjectManager().getFooterPage();
+		home = testContext.getPageObjectManager().getHomePage();
+	}
+
 	@Given("User going to click Shop All footer links")
 	public void user_going_to_click_shop_all_footer_links() {
 		home.homeLaunch();	
@@ -25,19 +25,31 @@ public class FooterStepdef  {
 	}
 
 
-	@Given("User verifies Contact Us details are visible in footer")
-	public void user_verifies_contact_us_details_are_visible_in_footer() {
-		home.homeLaunch();
-		footer.contactUS();
+	@Given("User verifies the payment logo is visible in footer")
+	public void user_verifies_the_payment_logo_is_visible_in_footer() {
+		home.homeLaunch();	
+		footer.paymentMethods();
+
+		
 	}
 
 
 
-	@Given("User verifies the Zlaata logo is visible in footer")
-	public void user_verifies_the_zlaata_logo_is_visible_in_footer() {
-		home.homeLaunch();
-		footer.zlaataLogo();
-	}
+
+	//
+	//	@Given("User verifies Contact Us details are visible in footer")
+	//	public void user_verifies_contact_us_details_are_visible_in_footer() {
+	//		home.homeLaunch();
+	//		footer.contactUS();
+	//	}
+	//
+	//
+
+	//	@Given("User verifies the Zlaata logo is visible in footer")
+	//	public void user_verifies_the_zlaata_logo_is_visible_in_footer() {
+	//		home.homeLaunch();
+	//		footer.zlaataLogo();
+	//	}
 
 
 

@@ -18,7 +18,10 @@ public abstract class SignupObjRepository extends BasePage {
 	@FindBy(xpath = "//img[@alt='Cancel']")
 	protected WebElement closepopup;
 	
-	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+//	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+//	protected WebElement profile;
+	
+	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup ']")
 	protected WebElement profile;
 	
 	@FindBy(xpath = "//button[@class='signup_box_btn']")
@@ -45,14 +48,19 @@ public abstract class SignupObjRepository extends BasePage {
 	@FindBy(name ="userMail")
 	protected WebElement signUpmail;
 	
-	@FindBy(id ="err_contact")
+//	@FindBy(id ="err_contact")
+//	protected WebElement validationMsgNumber;
+	
+	@FindBy(xpath = "//span[@class='error__msg phone_error_msg active']")
 	protected WebElement validationMsgNumber;
 	
 	@FindBy(id ="err_email")
 	protected WebElement validationMsgMail;
+//	
+//	@FindBy(id="err_contact")
+//	protected WebElement alreadyUsedNumber;
 	
-	@FindBy(id="err_contact")
-	protected WebElement alreadyUsedNumber;
+	
 	
 	@FindBy(id="err_otp")
 	protected WebElement phoneNumberOtp;

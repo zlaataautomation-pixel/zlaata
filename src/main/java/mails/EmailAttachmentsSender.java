@@ -56,6 +56,10 @@ public class EmailAttachmentsSender {
 		properties.put("mail.smtp.starttls.enable", "true");
 		properties.put("mail.user", userName);
 		properties.put("mail.password", password);
+		properties.put("mail.smtp.auth", "true");
+		properties.put("mail.smtp.starttls.enable", "true");
+		properties.put("mail.smtp.host", EmailConfig.SERVER);
+		properties.put("mail.smtp.port", EmailConfig.PORT);
 
 		// creates a new session with an authenticator
 		Authenticator auth = new Authenticator() {

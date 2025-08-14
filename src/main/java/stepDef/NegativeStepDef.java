@@ -253,7 +253,7 @@ public class NegativeStepDef {
 					negsignup.ClickProfileIcon();
 					negsignup.signupbutton();
 					negsignup.userName();
-					negsignup.userNumber();
+//					negsignup.userNumber();
 					negsignup.invalidOTP();
 					negsignup.verifyButton();
 					

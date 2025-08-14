@@ -30,7 +30,7 @@ public abstract class FooterObjRepo extends BasePage {
 	@FindBy(xpath = "//a[@class='vv_social_link_card']")
 	protected List<WebElement> footerSectionSocialMediaIcons;
 	
-	@FindBy(xpath = "//p[@class='vv_footer_copyrights_msg']")
+	@FindBy(xpath = "//p[@class='vv_footer_copyrights_msg footer_for_desktop']")
 	protected WebElement footerSectionEmailID;
 	
 	@FindBy(xpath = "//img[@alt='zlaata-footer-logo']")
@@ -42,6 +42,8 @@ public abstract class FooterObjRepo extends BasePage {
 	@FindBy(id = "subscribeletter")
 	protected WebElement mailId;
 	
+
+	
 	@FindBy(id = "subscribeletterbtn")
 	protected WebElement subScribeBtn;
 	
@@ -51,7 +53,8 @@ public abstract class FooterObjRepo extends BasePage {
 	@FindBy(xpath = "//p[contains(text(),'Please enter a valid email addres')]")
 	protected WebElement inValid;
 	
-	
+	@FindBy(xpath ="//div[@class='vv_footer_payment_methods  ']")
+	protected WebElement paymentlabel;
 	
 
 }

@@ -9,7 +9,7 @@ import basePage.BasePage;
 public abstract class MyOrdersObjRepository extends BasePage {
 	
 	
-	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup ']")
 	protected WebElement profile;
 	
 	@FindBy(xpath = "(//span[contains(text(),'Shop')])[1]")
@@ -48,7 +48,7 @@ public abstract class MyOrdersObjRepository extends BasePage {
 	protected WebElement addToCartProduct;
 
 	
-	@FindBy(xpath = "//button[@class='view__bag_btn']")
+	@FindBy(xpath ="//button[@class='Cls_cart_btn Cls_redirect_restrict']")
 	protected WebElement viewBag;
 	
 	@FindBy(xpath = "//button[@class='view_more_coupon_btn Cls_viewmore']")
