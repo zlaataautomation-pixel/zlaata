@@ -1,0 +1,8 @@
+file:src/test/resources/features/ProductListing/productListing.feature:111
+file:src/test/resources/features/OrdersPage/orders.feature:17
+file:src/test/resources/features/SignUp/NegativeScenarioSignup.feature:157
+file:src/test/resources/features/HomePage/home.feature:19:29:69:109:139
+file:src/test/resources/features/Menu/menu.feature:17
+file:src/test/resources/features/BagPage/bag.feature:129
+file:src/test/resources/features/Login/Login.feature:128
+file:src/test/resources/features/CheckoutPage/checkoutPage.feature:18
