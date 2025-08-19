@@ -27,6 +27,7 @@ public class PageObjectManager {
     private FooterPage footer;
     private ProductDetailsPage pDP;
     private SearchSectionPage search;
+    private CouponPage coupon;
    
    
 
@@ -99,6 +100,10 @@ public class PageObjectManager {
 	}
 	public OrdersPage getOrdersPage() {
         return (order == null) ? order = new OrdersPage(driver) : order;
+    
+	}
+	public CouponPage getCouponPage() {
+        return (coupon == null) ? coupon = new CouponPage(driver) : coupon;
     
 	}
 	

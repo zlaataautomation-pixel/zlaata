@@ -3,10 +3,10 @@
   <groupId>org.zlt.prd</groupId>
   <artifactId>ZlaataProduction</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-<properties>
+ <properties>
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
-		<selenium.version>4.24.0</selenium.version>
+		<selenium.version>4.34.0</selenium.version>
 		<webdrivermanager.version>5.9.2</webdrivermanager.version>
 		<zt.zp.version>1.12</zt.zp.version>
 		<javax.mail.version>1.6.2</javax.mail.version>

@@ -8,7 +8,7 @@ import basePage.BasePage;
 
 public abstract class CheckOutPageObjRepo extends BasePage {
 
-	@FindBy(xpath ="//button[@class='Cls_cart_btn']")
+	@FindBy(xpath ="//button[@class='Cls_cart_btn Cls_redirect_restrict']")
 	protected WebElement bagIcon;
 
 	@FindBy(xpath ="//div[@class='bag_inner_wrap Cls_bag_items_unavailable ']//div[@class='bag_closeup_btn']")

@@ -136,24 +136,15 @@ try {
 
 	@Given("User clicks on google link")
 	public void user_clicks_on_google_link() {
-		try {
-			login.mailLogin();
-		} catch (Exception e) {
-			System.out.println("💥 Step failed: " + e.getMessage());
-		    e.printStackTrace();
-		}
 		
+			login.mailLogin();
 	}
 
 
 	@Given("User clicks on facebook link")
 	public void user_clicks_on_facebook_link() {
-		try {
-			login.faceBookLink();
-		} catch (Exception e) {
-			System.out.println("💥 Step failed: " + e.getMessage());
-		    e.printStackTrace();
-		}
+		
+					login.faceBookLink();
 		
 		
 	}

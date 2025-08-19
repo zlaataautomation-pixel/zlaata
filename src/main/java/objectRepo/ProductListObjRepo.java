@@ -2,6 +2,8 @@ package objectRepo;
 
 
 
+import java.util.List;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import basePage.BasePage;
@@ -17,7 +19,7 @@ public abstract  class ProductListObjRepo extends BasePage {
 	@FindBy(xpath = "//a[@class='bread_crumb_link']")
 	protected WebElement homeCrumbLink;
 	
-	@FindBy(xpath = "//div[@class='carousel_inner_wrpr']")
+	@FindBy(xpath = "//a[@class='carousel_banner swiper-slide swiper-slide-active']")
 	protected WebElement banners;
 	
 	@FindBy(xpath = "//h3[@class='prod_list_topic']")
@@ -32,16 +34,22 @@ public abstract  class ProductListObjRepo extends BasePage {
 	@FindBy(xpath = "//div[@class='pagi_prev_btn']")
 	protected WebElement paginationPrv;
 	
-	@FindBy(xpath = "//button[@class='filter_menu_btn btn___1 Cls_filter_fn']")
+	@FindBy(xpath = "//div[@class='filter_menu_btn btn___1 Cls_filter_fn']")
 	protected WebElement showFilter;
 	
-	@FindBy(xpath = "//div[@class='pro__filter_list__main']")
+	@FindBy(xpath = "//div[@class='desktopFilter popup_containers active']")
 	protected WebElement showFilterMenu;
+	
+//	@FindBy(xpath = "//div[@class='filter_sort_btn_wrap']")
+//	protected WebElement sortBy;
 	
 	@FindBy(xpath = "//div[@class='filter_sort_btn_wrap']")
 	protected WebElement sortBy;
+
+	@FindBy(xpath = "//li[@class='filter_sort_list_item ']")
+	protected List<WebElement> sortOptions;
 	
-	@FindBy(xpath = "//ul[@class='filter_manu_sort_by_filter_list Cls_SortBy Cls_ProductListSortBy Cls_desktop_sort']//li[@class='active_filter_btn']")
+	@FindBy(xpath = "//li[@class='filter_sort_list_item active_filter_btn']")
 	protected WebElement sortByWhatsNew;
 	
 	@FindBy(xpath = "//ul[@class='filter_manu_sort_by_filter_list Cls_SortBy Cls_ProductListSortBy Cls_desktop_sort']//li[@value='Discount High to Low']")
@@ -63,7 +71,10 @@ public abstract  class ProductListObjRepo extends BasePage {
 	
 
 	
-	@FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']")
+//	@FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']")
+//	protected WebElement addToCart;
+	
+	@FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2 Cls_CartList ClsProductListSizes']")
 	protected WebElement addToCart;
 	
 	@FindBy(xpath = "(//button[@class='prod_filter_apply__btn btn___2'])[1]")

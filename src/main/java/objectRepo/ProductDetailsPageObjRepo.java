@@ -57,7 +57,7 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	public List <WebElement> wishlistProduct;
 
 
-	@FindBy(xpath = "//a[@class='wishlist-icon']")
+	@FindBy(xpath = "//a[@class='wishlist-icon Cls_redirect_restrict']")
 	protected WebElement wishlistIcon;
 
 
@@ -109,8 +109,8 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	@FindBy(xpath = "//button[@class='prod_buy_now_btn btn___2 Cls_Buy_now_To_Cart']")
 	protected WebElement buyNowbutton;
 	
-	@FindBy(xpath = ".//div[@class='offer_list_item_details_wrap']")
-	protected List <WebElement> couponListElements;
+//	@FindBy(xpath = ".//div[@class='offer_list_item_details_wrap']")
+//	protected List <WebElement> couponListElements;
 	
 	@FindBy(xpath = ".//button[@class='offer_list_item_apply_btn Cls_apply_coupon']")
 	protected WebElement applyCouponBtn;
@@ -137,10 +137,10 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	protected WebElement sortByDiscountLowtoHigh;
 	
 	
-	@FindBy(xpath = "//li[@value='Price High to Low']")
+	@FindBy(xpath = "//li[@data-value='Price High to Low']")
 	protected WebElement sortByPriceHightoLow;
 	
-	@FindBy(xpath = "//li[@value='Price Low to High']")
+	@FindBy(xpath = "//li[@data-value='Price Low to High']")
 	protected WebElement sortByPriceLowtoHigh;
 	
 	
@@ -200,8 +200,14 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	@FindBy(xpath = "//button[@class='prod_reviews_btn btn___2 Cls_write_a_btn Cls_write_reviewDisplay Cls_prod_review_btn']")
 	protected WebElement clickOnWriteReviewButton;
 
-	@FindBy(xpath = "//button[@class='write_review_submit_btn Cls_write_review_submit_btn btn___2 Cls_color_change  write_review_btn']")
+//	@FindBy(xpath = "//button[@class='write_review_submit_btn Cls_write_review_submit_btn btn___2 Cls_color_change  write_review_btn']")
+//	protected WebElement clickOnSubmitButton;
+	
+	
+	@FindBy(xpath = "//button[@class='write_review_submit_btn Cls_write_review_submit_btn btn___2 Cls_color_change write_review_btn']")
 	protected WebElement clickOnSubmitButton;
+	
+	
 
 	@FindBy(xpath = "//textarea[@class='prod_review_input']")
 	protected WebElement enterThedescription;

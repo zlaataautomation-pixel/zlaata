@@ -5,6 +5,15 @@ Feature: This is Negative SignUp feature
   #===========================================================================
   #ScenarioDescription : User Negative signup scenario
   #============================================================================
+  
+   @TC_UI_Zlaata_Signup_01
+Scenario Outline: TC_UI_Zlaata_Signup_01 | User  signup scenario |"<TD_ID>"
+    Given User Signup with all valid data
+    Examples:
+      | TD_ID                  |
+      | TD_UI_Zlaata_Signup_01 |
+  
+  
   @TC_UI_Zlaata_Signup_02
 Scenario Outline: TC_UI_Zlaata_Signup_02 | User left name field Empty |"<TD_ID>"
     Given User left name field Empty

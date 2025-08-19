@@ -10,20 +10,31 @@ import io.cucumber.java.en.Given;
 public class NegativeStepDef {
 	TestContext testContext;
 	NegativeSignupPages negsignup;
-
 	public NegativeStepDef(TestContext context) {
 		testContext = context;
 		negsignup = testContext.getPageObjectManager().getNegativeSignupPages();
 
 	}
+	
+	@Given("User Signup with all valid data")
+	public void user_signup_with_all_valid_data() throws TimeoutException {
+		negsignup.signUp();
+	}
 
 		@Given("User left name field Empty")
 		public void user_left_name_field_empty() {
-			negsignup.launchZltV7();
-			negsignup.ClickProfileIcon();
-			negsignup.signupbutton();
-			negsignup.userNumber();
-			negsignup.contbtn();
+			try {
+				negsignup.launchZltV7();
+				negsignup.ClickProfileIcon();
+				negsignup.signupbutton();
+				negsignup.userNumber();
+				negsignup.contbtn();
+				
+			} catch (Exception e) {
+				  ExceptionTracker.capture(e); // Capture the exact exception
+			        throw e; // re-throw so test still fails
+			}
+			
 		}
 		
 			@Given("User left phone number field Empty")
@@ -253,7 +264,7 @@ public class NegativeStepDef {
 					negsignup.ClickProfileIcon();
 					negsignup.signupbutton();
 					negsignup.userName();
-					negsignup.userNumber();
+//					negsignup.userNumber();
 					negsignup.invalidOTP();
 					negsignup.verifyButton();
 					

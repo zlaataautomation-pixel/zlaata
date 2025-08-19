@@ -27,8 +27,10 @@ public final class SearchSectionPage  extends SearchBarObjRepo{
 		PageFactory.initElements(this.driver, this);
 	}
 
+	//TC 01
 	public void searchbarClikable() {
 		Common.waitForElement(5);
+		
 		click(searchBarInput);
 		try {
 			if (headingRelatedProducts.isDisplayed()) 
@@ -44,7 +46,8 @@ public final class SearchSectionPage  extends SearchBarObjRepo{
 		}
 
 	}
-
+	
+//TC 02
 	public void TrendingAndRelatedHeading()
 	{
 		searchbarClikable();
@@ -53,6 +56,8 @@ public final class SearchSectionPage  extends SearchBarObjRepo{
 		String related = headingRelatedProducts.getText();
 		System.out.println("heading is displaying:"+related);
 	}
+	
+	//TC 03
 
 	public void clickAllTrendingProductsAndVerify() throws InterruptedException, TimeoutException {
 		searchbarClikable();
@@ -98,201 +103,56 @@ public final class SearchSectionPage  extends SearchBarObjRepo{
 			Thread.sleep(1000);
 		}
 	}
+//TC 04
 
-
-	public void searchBarUserEnterLessThanThreeCharater() 
-	{
-
-		searchbarClikable();
-		Common.waitForElement(2);
-
-		// 2. Get search data from Excel (assume multiple words like "kurta set")
-		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("Testing name: " + value);
-
-		// 3. Enter value in search bar
-		searchBarInput.sendKeys(value);
-		System.out.println("Entered Search Keyword: " + searchBarInput.getAttribute("value"));
-		Common.waitForElement(2);
-
-		// 4. Get URL before hitting ENTER
-		String urlBeforeSearch = driver.getCurrentUrl();
-		System.out.println("🔗 URL before search: " + urlBeforeSearch);
-
-		// 5. Hit Enter
-		searchBarInput.sendKeys(Keys.ENTER);
-		Common.waitForElement(3); // wait for results
-
-		// 6. Get URL after hitting Enter
-		String urlAfterSearch = driver.getCurrentUrl();
-		System.out.println("🔗 URL after search: " + urlAfterSearch);
-
-		// 7. Compare URLs
-		if (urlBeforeSearch.equals(urlAfterSearch)) {
-			System.out.println("✅ Search did NOT cause a redirect. Same page retained.");
-		} else {
-			System.out.println("❌ Search caused a redirect. URLs do not match.");
-		}
-	}
-	public void verifySearchSuggestionHeading() {
-		searchbarClikable();
-		Common.waitForElement(2);
-		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("🔍 Testing search keyword: " + value);	    
-		searchBarInput.sendKeys(value);
-		System.out.println("✅ Entered keyword: " + searchBarInput.getAttribute("value"));
-		Common.waitForElement(2);
-		searchBarInput.sendKeys(Keys.ENTER);
-		Common.waitForElement(3);
-		String actualMessage = heading.getText();
-		System.out.println("🧾 Heading displayed: " + actualMessage);
-		Assert.assertTrue("❌ Heading is empty or not as expected!", !actualMessage.trim().isEmpty());
-		System.out.println("\u001B[32m" + "✅ The heading message displayed correctly: " + actualMessage + "\u001B[0m");
-	}
-
-
-	public void verifySearchHistoryDisplaying()
-	{
-		Common.waitForElement(2);
-
-		click(searchBarInput);
-
-		Common.waitForElement(2);
-
-		// Step 2: Fetch search keyword from Excel/TestData
-		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("🔍 Testing search keyword: " + value);	    
-
-		// Step 3: Type into search bar and press Enter
-		searchBarInput.sendKeys(value);
-		System.out.println("✅ Entered keyword: " + searchBarInput.getAttribute("value"));
-		Common.waitForElement(2);
-		searchBarInput.sendKeys(Keys.ENTER);
-		Common.waitForElement(3);
-
-		// Step 4: Reopen the search bar (to check search history/suggestion)
-		click(searchBarInput);
-		Common.waitForElement(3);
-
-		String actualMessage =headingSearchHistory.getText();
-		System.out.println("🧾 Heading displayed: " + actualMessage);
-
-	}
-	public void verifysearchHistoryKeyworddisplayAnduserabletoDelete() {
+	public void searchKeyWordRedirectToCorrectpage() {
 		Common.waitForElement(2);
 		click(searchBarInput);
-		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("🔍 Testing search keyword: " + value);
-
-		searchBarInput.sendKeys(value);
-		System.out.println("✅ Entered keyword: " + searchBarInput.getAttribute("value"));
 		Common.waitForElement(2);
-		searchBarInput.sendKeys(Keys.ENTER); // Hit Enter
-		click(searchBarInput);
+		String value = Common.getValueFromTestDataMap("Search bar");
+		System.out.println("🔍 Step 1: Entering search keyword from Excel: " + value);
+		searchbaractive.sendKeys(value);
+		System.out.println("✅ Step 1: Keyword entered in input: " + searchbaractive.getAttribute("value"));
+		Common.waitForElement(2);
+		searchbaractive.sendKeys(Keys.ENTER); // First redirection
 		Common.waitForElement(3);
 
+		String firstRedirectionHeading = heading.getText();
+		System.out.println("📄 Step 2: Heading after first redirection: " + firstRedirectionHeading);
+		click(searchBarInput);
+		Common.waitForElement(3);
 		String historyHeading = headingSearchHistory.getText();
-		System.out.println("🧾 History heading displayed: " + historyHeading);
+		System.out.println("🧾 Step 3: Search history heading displayed: " + historyHeading);
 
 		String displayedKeyword = newSearchHistorykeywrod.getText();
-		System.out.println("🧾 Search history keyword displayed: " + displayedKeyword);
+		System.out.println("🧾 Step 3: Search history keyword displayed: " + displayedKeyword);
 
-		click(searchHistoryRemoveButtons);  // Assuming this deletes the correct keyword
+		click(newSearchHistorykeywrod); // Second redirection
+		Common.waitForElement(3);
 
-		click(searchBarInput);
-		Common.waitForElement(2);
+		String secondRedirectionHeading = heading.getText();
+		System.out.println("📄 Step 4: Heading after second redirection: " + secondRedirectionHeading);
 
-		List<WebElement> remainingKeywords = driver.findElements(By.xpath("//your_xpath_for_history_keywords_here"));
-
-		boolean keywordStillExists = remainingKeywords.stream()
-				.anyMatch(el -> el.getText().equalsIgnoreCase(value));
-
-		if (!keywordStillExists) {
-			System.out.println("✅ Keyword successfully deleted from search history.");
-		} else {
-			System.out.println("❌ Keyword still present in search history.");
+		if (firstRedirectionHeading.equals(secondRedirectionHeading)) {
+			System.out.println("❌ FAIL: Both redirections landed on the SAME page.");
 		}
+		else {
+			System.out.println("❌ FAIL: Both redirections differnE page.");
 
-		Assert.assertFalse("Search keyword should be removed from history!", keywordStillExists);
+		}
 	}
 
-	public void enterProductNameExactlyRedirectToProduct() {
-		Common.waitForElement(2);
-		click(searchBarInput);
-		Common.waitForElement(2);
-		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("🔍 Testing search keyword: " + value);
-
-		searchBarInput.clear();
-		searchBarInput.sendKeys(value);
-		System.out.println("✅ Entered keyword: " + searchBarInput.getAttribute("value"));
-		Common.waitForElement(1);
-		searchBarInput.sendKeys(Keys.ENTER);
-		Common.waitForElement(3);
-
-		String actualHeading = heading.getText().trim();
-		System.out.println("🧾 Search Result Heading: " + actualHeading);
-		Assert.assertFalse("❌ Heading is empty!", actualHeading.isEmpty());
-		System.out.println("\u001B[32m✅ Heading displayed correctly: " + actualHeading + "\u001B[0m");
-
-		String displayedProductName = productName.getText().trim();
-		System.out.println("🧾 Product Name Displayed: " + displayedProductName);
-
-		Assert.assertEquals("❌ Heading and product name mismatch!",
-				actualHeading.toLowerCase(), displayedProductName.toLowerCase());
-
-		System.out.println("\u001B[32m✅ Heading and product name match: " + actualHeading + "\u001B[0m");
-	}
-
-	public void recentlyViewProductAppears() {
-		Common.waitForElement(2);
-
-		click(searchBarInput);
-		Common.waitForElement(2);
-
-		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("🔍 Testing search keyword: " + value);
-
-		searchBarInput.clear();
-		searchBarInput.sendKeys(value);
-		System.out.println("✅ Entered keyword: " + searchBarInput.getAttribute("value"));
-		Common.waitForElement(1);
-		searchBarInput.sendKeys(Keys.ENTER);
-		Common.waitForElement(3);
-
-		String actualHeading = heading.getText().trim();
-		System.out.println("🧾 Search Result Heading: " + actualHeading);
-		Assert.assertFalse("❌ Heading is empty!", actualHeading.isEmpty());
-		System.out.println("\u001B[32m✅ Heading displayed correctly: " + actualHeading + "\u001B[0m");
-
-		click(productListingImage);
-		Common.waitForElement(2);
-		click(buyNowButton);
-		Common.waitForElement(3);
-
-		click(searchBarInput);
-		Common.waitForElement(2);
-
-		String recentHeading = recentlyViwed.getText().trim();
-		System.out.println("🧾 Recently Viewed Section Heading: " + recentHeading);
-
-		String recentProduct = recentlyViwedProduct.getText().trim();
-		System.out.println("🧾 Recently Viewed Product Name: " + recentProduct);
-
-		Assert.assertEquals("❌ Recently viewed product does not match searched product!",
-				actualHeading.toLowerCase(), recentProduct.toLowerCase());
-
-		System.out.println("\u001B[32m✅ Recently viewed product matches the searched product: " + recentProduct + "\u001B[0m");
-	}
-
+	
+	//Tc 05
 
 	public void validateRelatedQueriesAndHeadings() throws InterruptedException {
 		String keyword = Common.getValueFromTestDataMap("Search bar"); // e.g., "yellow"
 		System.out.println("🔍 Searching for keyword: " + keyword);
 
 		click(searchBarInput);
-		searchBarInput.sendKeys(keyword);
-		Common.waitForElement(2); // Wait for related queries dropdown
+		Common.waitForElement(3);
+		searchbaractive.sendKeys(keyword);
+//		Common.waitForElement(10); // Wait for related queries dropdown
 
 		List<WebElement> queries = driver.findElements(By.xpath("//a[@class='product-redirect-tag cls_search_collection']"));
 		int totalQueries = queries.size();
@@ -322,53 +182,224 @@ public final class SearchSectionPage  extends SearchBarObjRepo{
 				Assert.fail("Heading mismatch for: " + expectedHeading);
 			}
 			Common.waitForElement(1);
+			driver.navigate().back();
+
 			click(searchBarInput);
-			searchBarInput.clear();
-			searchBarInput.sendKeys(keyword);
+			searchbaractive.sendKeys(keyword);
 			Common.waitForElement(1);
 		}
+		
 
-		System.out.println("🏁 Validation completed for all related queries.");
-	}
+	System.out.println("🏁 Validation completed for all related queries.");
 
-
-
-	public void searchKeyWordRedirectToCorrectpage() {
-		Common.waitForElement(2);
-		click(searchBarInput);
+		}
+	//TC 06
+	public void verifySearchSuggestionHeading() {
+		searchbarClikable();
 		Common.waitForElement(2);
 		String value = Common.getValueFromTestDataMap("Search bar");
-		System.out.println("🔍 Step 1: Entering search keyword from Excel: " + value);
-		searchBarInput.sendKeys(value);
-		System.out.println("✅ Step 1: Keyword entered in input: " + searchBarInput.getAttribute("value"));
+		System.out.println("🔍 Testing search keyword: " + value);	    
+		searchbaractive.sendKeys(value);
+		System.out.println("✅ Entered keyword: " + searchbaractive.getAttribute("value"));
 		Common.waitForElement(2);
-		searchBarInput.sendKeys(Keys.ENTER); // First redirection
+		searchbaractive.sendKeys(Keys.ENTER);
+		Common.waitForElement(3);
+		String actualMessage = heading.getText();
+		System.out.println("🧾 Heading displayed: " + actualMessage);
+		Assert.assertTrue("❌ Heading is empty or not as expected!", !actualMessage.trim().isEmpty());
+		System.out.println("\u001B[32m" + "✅ The heading message displayed correctly: " + actualMessage + "\u001B[0m");
+	}
+
+//TC 07
+	public void verifySearchHistoryDisplaying()
+	{
+		Common.waitForElement(2);
+
+		click(searchBarInput);
+
+		Common.waitForElement(2);
+
+		// Step 2: Fetch search keyword from Excel/TestData
+		String value = Common.getValueFromTestDataMap("Search bar");
+		System.out.println("🔍 Testing search keyword: " + value);	    
+
+		// Step 3: Type into search bar and press Enter
+		searchbaractive.sendKeys(value);
+		System.out.println("✅ Entered keyword: " + searchbaractive.getAttribute("value"));
+		Common.waitForElement(2);
+		searchbaractive.sendKeys(Keys.ENTER);
 		Common.waitForElement(3);
 
-		String firstRedirectionHeading = heading.getText();
-		System.out.println("📄 Step 2: Heading after first redirection: " + firstRedirectionHeading);
+		// Step 4: Reopen the search bar (to check search history/suggestion)
 		click(searchBarInput);
 		Common.waitForElement(3);
-		String historyHeading = headingSearchHistory.getText();
-		System.out.println("🧾 Step 3: Search history heading displayed: " + historyHeading);
 
-		String displayedKeyword = newSearchHistorykeywrod.getText();
-		System.out.println("🧾 Step 3: Search history keyword displayed: " + displayedKeyword);
+		String actualMessage =headingSearchHistory.getText();
+		System.out.println("🧾 Heading displayed: " + actualMessage);
 
-		click(newSearchHistorykeywrod); // Second redirection
+	}
+	//TC 08
+	
+	public void verifysearchHistoryKeyworddisplayAnduserabletoDelete() {
+		Common.waitForElement(2);
+		click(searchBarInput);
+		String value = Common.getValueFromTestDataMap("Search bar");
+		System.out.println("🔍 Testing search keyword: " + value);
+
+		searchbaractive.sendKeys(value);
+		System.out.println("✅ Entered keyword: " + searchbaractive.getAttribute("value"));
+		Common.waitForElement(2);
+		searchbaractive.sendKeys(Keys.ENTER); // Hit Enter
+		click(searchBarInput);
 		Common.waitForElement(3);
 
-		String secondRedirectionHeading = heading.getText();
-		System.out.println("📄 Step 4: Heading after second redirection: " + secondRedirectionHeading);
+		String historyHeading = headingSearchHistory.getText();
+		System.out.println("🧾 History heading displayed: " + historyHeading);
 
-		if (firstRedirectionHeading.equals(secondRedirectionHeading)) {
-			System.out.println("❌ FAIL: Both redirections landed on the SAME page.");
+		String displayedKeyword = newSearchHistorykeywrod.getText();
+		System.out.println("🧾 Search history keyword displayed: " + displayedKeyword);
+
+		click(searchHistoryRemoveButtons);
+
+		Common.waitForElement(2);
+
+		List<WebElement> updatedKeywords = driver.findElements(By.xpath("//*[@class='search_history_item_remove_btn']")); // 🔁 Update XPath if needed
+
+		boolean isRemoved = true;
+		for (WebElement keyword : updatedKeywords) {
+		    if (keyword.getText().trim().equalsIgnoreCase(displayedKeyword)) {
+		        isRemoved = false;
+		        break;
+		    }
 		}
-		else {
-			System.out.println("❌ FAIL: Both redirections differnE page.");
 
+		// If-else block to validate
+		if (isRemoved) {
+		    System.out.println("✅ Keyword successfully removed: " + displayedKeyword);
+		} else {
+		    System.err.println("❌ Keyword still present after clicking remove: " + displayedKeyword);
+		    Assert.fail("Search history keyword not removed.");
 		}
 	}
+	//TC 09
+
+	public void enterProductNameExactlyRedirectToProduct() {
+//		Common.waitForElement(2);
+//		click(searchBarInput);
+//		Common.waitForElement(2);
+//		String value = Common.getValueFromTestDataMap("Search bar");
+//		System.out.println("🔍 Testing search keyword: " + value);
+//		searchbaractive.sendKeys(value);
+//		System.out.println("✅ Entered keyword: " + searchbaractive.getAttribute("value"));
+//		Common.waitForElement(1);
+//		searchbaractive.sendKeys(Keys.ENTER);
+//		Common.waitForElement(3);
+//
+//		String actualHeading = heading.getText().trim();
+//		System.out.println("🧾 Search Result Heading: " + actualHeading);
+//		Assert.assertFalse("❌ Heading is empty!", actualHeading.isEmpty());
+//		System.out.println("\u001B[32m✅ Heading displayed correctly: " + actualHeading + "\u001B[0m");
+//
+//		String displayedProductName = productName.getText().trim();
+//		System.out.println("🧾 Product Name Displayed: " + displayedProductName);
+//
+//		Assert.assertEquals("❌ Heading and product name mismatch!",
+//				actualHeading.toLowerCase(), displayedProductName.toLowerCase());
+//
+//		System.out.println("\u001B[32m✅ Heading and product name match: " + actualHeading + "\u001B[0m");
+		Common.waitForElement(2);
+		click(searchBarInput);
+		Common.waitForElement(2);
+
+		String value = Common.getValueFromTestDataMap("Search bar");
+		System.out.println("🔍 Testing search keyword: " + value);
+		searchbaractive.sendKeys(value);
+		System.out.println("✅ Entered keyword: " + searchbaractive.getAttribute("value"));
+
+		Common.waitForElement(1);
+		searchbaractive.sendKeys(Keys.ENTER);
+		Common.waitForElement(3);
+
+		// Get and validate heading
+		String headingText = heading.getText().trim();
+		System.out.println("🧾 Search Result Heading: " + headingText);
+		Assert.assertFalse("❌ Heading is empty!", headingText.isEmpty());
+		System.out.println("\u001B[32m✅ Heading displayed correctly: " + headingText + "\u001B[0m");
+
+		// Get and print product name
+		String productText = productName.getText().trim();
+		System.out.println("🧾 Product Name Displayed: " + productText);
+
+		// Normalize text
+		headingText = headingText.toLowerCase().replaceAll("[^a-z0-9 ]", "");
+		productText = productText.toLowerCase().replaceAll("[^a-z0-9 ]", "");
+
+		// Split product name into words
+		String[] productWords = productText.split(" ");
+
+		// Check if any word from product name is contained in heading
+		boolean matchFound = false;
+		for (String word : productWords) {
+		    if (headingText.contains(word)) {
+		        matchFound = true;
+		        break;
+		    }
+		}
+
+		if (matchFound) {
+		    System.out.println("\u001B[32m✅ At least one word from product name matched in heading. Test passed.\u001B[0m");
+		} else {
+		    Assert.fail("❌ No matching word from product name found in heading!");
+		}
+
+	}
+
+	//TC 10
+	public void recentlyViewProductAppears() {
+		Common.waitForElement(2);
+
+		click(searchBarInput);
+		Common.waitForElement(2);
+
+		String value = Common.getValueFromTestDataMap("Search bar");
+		System.out.println("🔍 Testing search keyword: " + value);
+
+//		searchBarInput.clear();
+		searchbaractive.sendKeys(value);
+		System.out.println("✅ Entered keyword: " + searchbaractive.getAttribute("value"));
+		Common.waitForElement(1);
+		searchbaractive.sendKeys(Keys.ENTER);
+		Common.waitForElement(3);
+
+		String actualHeading = heading.getText().trim();
+		System.out.println("🧾 Search Result Heading: " + actualHeading);
+		Assert.assertFalse("❌ Heading is empty!", actualHeading.isEmpty());
+		System.out.println("\u001B[32m✅ Heading displayed correctly: " + actualHeading + "\u001B[0m");
+
+		click(productListingImage);
+		Common.waitForElement(2);
+		click(buyNowButton);
+		Common.waitForElement(3);
+
+		click(searchBarInput);
+		Common.waitForElement(2);
+
+		String recentHeading = recentlyViwed.getText().trim();
+		System.out.println("🧾 Recently Viewed Section Heading: " + recentHeading);
+
+		String recentProduct = recentlyViwedProduct.getText().trim();
+		System.out.println("🧾 Recently Viewed Product Name: " + recentProduct);
+
+		Assert.assertEquals("❌ Recently viewed product does not match searched product!",
+				actualHeading.toLowerCase(), recentProduct.toLowerCase());
+
+		System.out.println("\u001B[32m✅ Recently viewed product matches the searched product: " + recentProduct + "\u001B[0m");
+	}
+
+
+
+
+
 
 
 

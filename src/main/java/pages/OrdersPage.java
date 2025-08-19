@@ -234,7 +234,7 @@ public final class OrdersPage extends SaleOffer50PercentageObjRepo{
 				WebElement addToCart = driver.findElement(By.xpath("//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']"));
 				addToCart.click();
 				Common.waitForElement(5);
-				driver.findElement(By.xpath("//button[@class='Cls_cart_btn']")).click();
+				driver.findElement(By.xpath("//button[@class='Cls_cart_btn Cls_redirect_restrict']")).click();
 				Common.waitForElement(2);
 			}
 		}
@@ -284,17 +284,17 @@ public final class OrdersPage extends SaleOffer50PercentageObjRepo{
 		}
 
 		// Gift Wrap
-		double giftWrap = 0, express = 0, custom = 0;
-		try {
-			WebElement giftWrapToggle = driver.findElement(By.xpath("//input[@class='checkout_git_list_item__checkbox']"));
-			giftWrapToggle.click();
-			driver.findElement(By.id("recipient-name")).sendKeys("Test User");
-			driver.findElement(By.xpath("//button[@class='gift__submit btn___2']")).click();
-			Common.waitForElement(2);
-			giftWrap = Double.parseDouble(driver.findElement(By.xpath(".//div[@class='price_details_pair git__wraping11']")).getText().replaceAll("[^\\d.]", ""));
-		} catch (Exception e) {
-			System.out.println("🎁 Gift wrap section not available or skipped");
-		}
+		double express = 0, custom = 0;
+//		try {
+//			WebElement giftWrapToggle = driver.findElement(By.xpath("//input[@class='checkout_git_list_item__checkbox']"));
+//			giftWrapToggle.click();
+//			driver.findElement(By.id("recipient-name")).sendKeys("Test User");
+//			driver.findElement(By.xpath("//button[@class='gift__submit btn___2']")).click();
+//			Common.waitForElement(2);
+//			giftWrap = Double.parseDouble(driver.findElement(By.xpath(".//div[@class='price_details_pair git__wraping11']")).getText().replaceAll("[^\\d.]", ""));
+//		} catch (Exception e) {
+//			System.out.println("🎁 Gift wrap section not available or skipped");
+//		}
 
 		// Express Delivery
 		try {
@@ -357,13 +357,13 @@ public final class OrdersPage extends SaleOffer50PercentageObjRepo{
 		double finalPayable = finalAmount;
 		double actualTotalMrp = expectedTotalMrp; 
 		double actualDiscountedMrp = expectedTotalDiscounted;
-		int earnedThreads = ((int) (finalPayable - giftWrap - express - custom) / 500) * 10;
-		int actualEarnedThreads = ((int) (finalPayable - giftWrap - express - custom) / 500) * 10;
+		int earnedThreads = ((int) (finalPayable  - express - custom) / 500) * 10;
+		int actualEarnedThreads = ((int) (finalPayable  - express - custom) / 500) * 10;
 
 		System.out.println("============= Checkout Summary ==================================");	
 		System.out.println("Expected Total MRP: Rs. " + expectedTotalMrp + " || Actual Total MRP: Rs. " + actualTotalMrp + " || " + (expectedTotalMrp == actualTotalMrp ? "\u001B[32mMatched\u001B[0m" : "\u001B[31mMismatch\u001B[0m"));
 		System.out.println("Expected Discounted MRP: Rs. " + expectedTotalDiscounted + " || Actual Discounted MRP: Rs. " + actualDiscountedMrp + " || " + (expectedTotalDiscounted == actualDiscountedMrp ? "\u001B[32mMatched\u001B[0m" : "\u001B[31mMismatch\u001B[0m"));
-		System.out.println("Gift Wrap: Rs. " + giftWrap);
+//		System.out.println("Gift Wrap: Rs. " + giftWrap);
 		System.out.println("Express Delivery: Rs. " + express);
 		System.out.println("Customization Charges: Rs. " + custom);
 		System.out.println("Expected Earned Threads: " + earnedThreads + " || Actual Earned Threads: " + actualEarnedThreads + " || " + (earnedThreads == actualEarnedThreads ? "\u001B[32mMatched\u001B[0m" : "\u001B[31mMismatch\u001B[0m"));

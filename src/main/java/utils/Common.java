@@ -8,6 +8,7 @@ import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +17,16 @@ import java.util.Random;
 
 
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.vimalselvam.cucumber.listener.Reporter;
 import stepDef.Hooks;
@@ -176,6 +184,34 @@ public final class Common {
 	        }
 	        return splitAmounts;
 	    }
-	 
+	 public static void safeClick(WebDriver driver, WebElement element) {
+		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		    try {
+		        wait.until(ExpectedConditions.elementToBeClickable(element));
+		        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", element);
+		        wait.until(ExpectedConditions.elementToBeClickable(element));
+		        element.click();
+		    } catch (ElementClickInterceptedException e) {
+		        // fallback to JS click
+		        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", element);
+		    } catch (StaleElementReferenceException e) {
+		        // element went stale — re-find and retry once
+		        try {
+		            WebElement fresh = driver.findElement(By.xpath(getElementXPath(element)));
+		            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", fresh);
+		            fresh.click();
+		        } catch (Exception ignore) { /* best-effort */ }
+		    }
+		}
+
+		// NOTE: getElementXPath is left as a placeholder if you want re-find capability.
+		// If you don't have a reliable way to map element->xpath, you can remove the StaleElementReference fallback.
+		private static String getElementXPath(WebElement el) {
+		    try {
+		        return el.getAttribute("xpath");
+		    } catch (Exception e) {
+		        return "";
+		    }
+		}
    
 }

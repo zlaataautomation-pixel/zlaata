@@ -20,8 +20,8 @@ public class CheckOutPageStepDef {
 
 	@Given("User Verifies Checkout page calculation")
 	public void user_verifies_checkout_page_calculation() {
-		cOp.verifyCheckoutCalculations();
-
+		cOp.verifyCheckoutCalculationsWithExcel();
+		
 
 	}
 

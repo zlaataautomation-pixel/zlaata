@@ -1,4 +1,4 @@
-Feature: Bag Page Feature
+Feature: Bag Page Functionality
 
   #===========================================================================
   # Test Case ID :: TC_UI_Zlaata_BP_01

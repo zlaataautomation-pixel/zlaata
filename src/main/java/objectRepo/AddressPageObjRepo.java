@@ -185,8 +185,12 @@ public abstract class AddressPageObjRepo extends BasePage {
    @FindBy(xpath = "//span[@class='address_type_error_msg error__msg Cls_form_comments_error comment_error_msg active']")
    protected WebElement validationCommentTxtBox;
    
-   @FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+//   @FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+//	protected WebElement profile;
+   
+   @FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup ']")
 	protected WebElement profile;
+   
 	
    @FindBy(xpath = "//li[@class='navigation_menu_list nav_menu_dropdown shop']")
 	protected WebElement shopMenu;
@@ -205,8 +209,10 @@ public abstract class AddressPageObjRepo extends BasePage {
    @FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']")
 	protected WebElement addToCart;
    
-   @FindBy(xpath ="//button[@class='Cls_cart_btn Cls_redirect_restrict']")
-	protected WebElement bagIcon;
+//   @FindBy(xpath ="//button[@class='Cls_cart_btn']")
+//	protected WebElement bagIcon;
+   @FindBy(xpath = "//button[@class='Cls_cart_btn Cls_redirect_restrict']")
+   protected WebElement bagIcon;
    
    @FindBy(xpath ="//button[.='Buy Now']")
 	protected WebElement buyNowButton;

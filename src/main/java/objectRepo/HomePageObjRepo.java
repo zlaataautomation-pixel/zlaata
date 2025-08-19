@@ -55,7 +55,7 @@ public abstract class HomePageObjRepo extends BasePage {
 	@FindBy(xpath = "//div[@class='carousel_cta']")
 	protected WebElement pause;
 	
-	@FindBy(xpath = "//a[contains(text(),'Show More')]")
+	@FindBy(xpath = "//a[@class='new_arrival_show_more_btn btn___2']")
 	protected WebElement showMore;
 	
 	@FindBy(xpath = "//div[@class='products_img']")
@@ -124,7 +124,7 @@ public abstract class HomePageObjRepo extends BasePage {
 	@FindBy(xpath = "(//img[@class='star feedbackStar'])[5]")
 	protected WebElement feedStarButton;
 	
-	@FindBy(xpath = "//button[@class='step6_btn ecomFeedbackForm ']")
+	@FindBy(xpath = "//button[@class='step6_btn ecomFeedbackForm']")
 	protected WebElement feedFinalContinue;
 	
 	@FindBy(id = "multiStepForm")
@@ -136,7 +136,7 @@ public abstract class HomePageObjRepo extends BasePage {
 	@FindBy(xpath = "//div[@class='bottom_icons_box']")
 	protected WebElement backToTOP;
 	
-	@FindBy(xpath = "//div[@class='whatsapp_icons']")
+	@FindBy(xpath = "//div[@class='whatsapp_icons ']")
 	protected WebElement whatsApp;
 	
 	@FindBy(xpath = "//div[@class='swiper_next__btn']")

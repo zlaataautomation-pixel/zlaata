@@ -21,7 +21,11 @@ public abstract class LoginObjRepository extends BasePage {
 	@FindBy(xpath = "//img[@alt='Cancel']")
 	protected WebElement closepopup;
 	
-	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+//	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup']")
+//	protected WebElement profile;
+	
+	
+	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup ']")
 	protected WebElement profile;
 	
 	@FindBy(id = "userNumber")
