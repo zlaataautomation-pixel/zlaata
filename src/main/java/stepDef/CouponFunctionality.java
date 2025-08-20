@@ -341,7 +341,7 @@ public class CouponFunctionality {
 		@And("user checking apply and remove button")
 		public void user_checking_apply_and_remove_button() {
 			coupon.CouponAppliedValidationMessage();
-			coupon.removeCouponFunctionality("Coupon removed sucessfully!");
+			coupon.removeCouponFunctionality("Coupon removed successfully!");
 			coupon.CouponRemovedOrNot();
 		}
 
