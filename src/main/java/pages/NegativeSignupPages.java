@@ -39,8 +39,8 @@ private WebDriver driver;
 	public void launchZltV7() {
 	
         driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-//        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-//        click(submit);
+        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+        click(submit);
 //        popup();
     }
 	private void popup() {
