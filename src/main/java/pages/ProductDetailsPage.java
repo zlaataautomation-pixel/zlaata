@@ -964,26 +964,35 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 	}
 
 	public void returnAndExchangeLink() {
-		RandomProduct();
-		Common.waitForElement(1);
-		scrollUsingJSWindow();
-		try {
-			if (clickOnReturn_ExchangeDropDownArrow.isDisplayed()) {
-				click(clickOnReturn_ExchangeDropDownArrow);
-				Common.waitForElement(1);
-				click(clickOnTheLink);
-				Common.waitForElement(2);
-			}
-			String currentUrl = driver.getCurrentUrl();
-			if (!currentUrl.equals(driver.getCurrentUrl())) {
-				System.out.println("Redirection of return and exchange link is success");
-			} else {
-				System.out.println("Redirection of return and exchange link in the same page");
-			}
-		} catch (Exception e) {
-			System.out.println("Caught an exception: " + e.getMessage());
-		}
+	    RandomProduct();
+	    Common.waitForElement(2);
+	    scrollUsingJSWindow();
+
+	    try {
+	        // Check if the section is present
+	        List<WebElement> section = driver.findElements(By.xpath("//h5[contains(normalize-space(), 'Return')]"));
+
+	        if (!section.isEmpty()) {
+	            System.out.println("Return & Exchange option is available");
+
+	            // Now check for the link inside that section
+	            List<WebElement> link = driver.findElements(By.xpath("//a[contains(text(),'Click Here')]"));
+
+	            if (!link.isEmpty()) {
+	                System.out.println("Return & Exchange link is available: " + link.get(0).getAttribute("href"));
+	            } else {
+	                System.out.println("Return & Exchange link is NOT available");
+	            }
+
+	        } else {
+	            System.out.println("Return & Exchange option not available");
+	        }
+
+	    } catch (Exception e) {
+	        System.out.println("Error while checking Return & Exchange: " + e.getMessage());
+	    }
 	}
+
 	public void reviewViewAll() {
 		RandomProduct();
 		Common.waitForElement(1);
