@@ -1,3 +1,4 @@
+
 Feature: Product Details Page Feature
 
   #===========================================================================
@@ -71,8 +72,9 @@ Scenario Outline: TC_UI_Zlaata_PDP_09 | Verify Size Selection Functionality | "<
     | TD_UI_Zlaata_PDP_09   |
 
 @TC_UI_Zlaata_PDP_10
-Scenario Outline: TC_UI_Zlaata_PDP_10 | Verify "Ask Us Anything" Section | "<TD_ID>"
-  Given User Verifies "Ask Us Anything" Section
+Scenario Outline: TC_UI_Zlaata_PDP_10 | Verify that the category name is displayed on the Product Details Page | "<TD_ID>"
+ Given User verifies that the category name is displayed on the Product Details Page
+
   Examples:
     | TD_ID                  |
     | TD_UI_Zlaata_PDP_10   |

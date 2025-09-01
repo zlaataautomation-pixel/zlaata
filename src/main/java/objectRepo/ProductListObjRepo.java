@@ -19,8 +19,9 @@ public abstract  class ProductListObjRepo extends BasePage {
 	@FindBy(xpath = "//a[@class='bread_crumb_link']")
 	protected WebElement homeCrumbLink;
 	
-	@FindBy(xpath = "//a[@class='carousel_banner swiper-slide swiper-slide-active']")
+	@FindBy(xpath = "//a[@class='carousel_banner  ']")
 	protected WebElement banners;
+	
 	
 	@FindBy(xpath = "//h3[@class='prod_list_topic']")
 	protected WebElement shopPageHead;

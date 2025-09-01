@@ -50,28 +50,33 @@ public final class Menus extends MenuObjRepo {
  
  public void newArrivalSuggestion() {
 	 
-	     Actions actions = new Actions(driver);
-		actions.moveToElement(newArrivalMenu).build().perform();
-	    List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//span[@class='na_dropdown_card_name']"));
-		Collections.shuffle(clickRandomProduct);
+	 Actions actions = new Actions(driver);
+	 actions.moveToElement(newArrivalMenu).perform();
 
-		if (!clickRandomProduct.isEmpty()) {
-			WebElement randomProduct = clickRandomProduct.get(0);
-			actions.moveToElement(randomProduct).click().build().perform();
-			String heading = newArrivalSuggestionRedirection.getText();
-		    Assert.assertTrue("Navigated to product details Page", heading.length() <= 50);
-		    if (heading.contains(heading)) {
-				System.out.println("The heading is displayed: "+ heading);
-				
-			}
-			else {
-				System.out.println("The Menu is not redirecting");
-		
-			}
-		}
-		
-}
- 
+	 // Get all dropdown products
+	 List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//span[@class='na_dropdown_card_name']"));
+	 Collections.shuffle(clickRandomProduct);
+
+	 if (!clickRandomProduct.isEmpty()) {
+	     WebElement randomProduct = clickRandomProduct.get(0);
+	     actions.moveToElement(randomProduct).click().perform();
+
+	     // Get product heading
+	     String heading = newArrivalSuggestionRedirection.getText();
+
+	     // Assert that heading is not empty
+	     Assert.assertFalse("❌ Product heading is empty, navigation may have failed!", heading.isEmpty());
+
+	     // Optional: Check that URL contains 'product'
+	     String currentUrl = driver.getCurrentUrl();
+	     Assert.assertTrue("❌ Did not navigate to product details page!", currentUrl.contains("product"));
+
+	     System.out.println("✅ Navigated to product details page. Heading: " + heading);
+	 } else {
+	     System.out.println("⚠️ No products found in New Arrivals dropdown.");
+	 }
+
+ }
 public void saleMenu() {
 	click(saleMenu);
 	String heading = saleMenuHead.getText();

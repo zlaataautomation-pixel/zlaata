@@ -2,6 +2,7 @@ package pages;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import org.junit.Assert;
@@ -82,45 +83,71 @@ public  final class FooterPage  extends FooterObjRepo{
 	    }
 	}
 	
-	public void contactUS() {
-		Common.waitForElement(2);
-        Actions actions = new Actions(driver);
-	    actions.sendKeys(Keys.END).perform();
-	    Common.waitForElement(1);
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    js.executeScript("arguments[0].scrollIntoView({block: 'center'});", footerContactUsLinks);
-	    try {
-			if (footerContactUsLinks.isDisplayed()) {
-				String contactDetails = footerContactUsLinks.getText();
-				System.out.println("The contact details: ");
-				System.out.println("------------------------");
-				System.out.println(contactDetails);
-			}
-			else {
-				System.err.println("Contact Deatils not displaying");
-			}
-		} catch (Exception e) {
-			System.out.println("Error verifying link: " + e.getMessage());
-		}
-	}
+//	public void contactUS() {
+//		Common.waitForElement(2);
+//        Actions actions = new Actions(driver);
+//	    actions.sendKeys(Keys.END).perform();
+//	    Common.waitForElement(1);
+//	    JavascriptExecutor js = (JavascriptExecutor) driver;
+//	    js.executeScript("arguments[0].scrollIntoView({block: 'center'});", footerContactUsLinks);
+//	    try {
+//			if (footerContactUsLinks.isDisplayed()) {
+//				String contactDetails = footerContactUsLinks.getText();
+//				System.out.println("The contact details: ");
+//				System.out.println("------------------------");
+//				System.out.println(contactDetails);
+//			}
+//			else {
+//				System.err.println("Contact Deatils not displaying");
+//			}
+//		} catch (Exception e) {
+//			System.out.println("Error verifying link: " + e.getMessage());
+//		}
+//	}
+//	
 	
+//	public void zlaataLogo() {
+//		Common.waitForElement(2);
+//        Actions actions = new Actions(driver);
+//	    actions.sendKeys(Keys.END).perform();
+//	    Common.waitForElement(1);
+//	    JavascriptExecutor js = (JavascriptExecutor) driver;
+//	    js.executeScript("arguments[0].scrollIntoView({block: 'center'});", footerzlaataLogo);
+//	    try {
+//			if (footerzlaataLogo.isDisplayed()) {
+//				System.out.println("Logo is displayed");
+//				
+//			}
+//		} catch (Exception e) {
+//			System.out.println("Error verifying link: " + e.getMessage());
+//		}
+//	}
 	
-	public void zlaataLogo() {
-		Common.waitForElement(2);
-        Actions actions = new Actions(driver);
-	    actions.sendKeys(Keys.END).perform();
-	    Common.waitForElement(1);
-	    JavascriptExecutor js = (JavascriptExecutor) driver;
-	    js.executeScript("arguments[0].scrollIntoView({block: 'center'});", footerzlaataLogo);
+	public void paymentMethods() {
 	    try {
-			if (footerzlaataLogo.isDisplayed()) {
-				System.out.println("Logo is displayed");
-				
-			}
-		} catch (Exception e) {
-			System.out.println("Error verifying link: " + e.getMessage());
-		}
+	        WebElement paymentLabel = driver.findElement(By.xpath("//div[@class='vv_footer_payment_methods]"));
+
+	        // Scroll into view
+	        JavascriptExecutor js = (JavascriptExecutor) driver;
+	        js.executeScript("arguments[0].scrollIntoView(true);", paymentLabel);
+
+	        Thread.sleep(500); // Optional pause
+
+	        if (paymentLabel.isDisplayed()) {
+	            String payText = paymentLabel.getText();
+	            System.out.println("Payment label is displayed with text: " + payText);
+	        } else {
+	            System.out.println("Payment label is present but not visible.");
+	        }
+
+	    } catch (NoSuchElementException e) {
+	        // This is your "else" condition if element is missing
+	        System.out.println("Payment label is NOT present on the page.");
+	    } catch (Exception e) {
+	        System.out.println("An unexpected error occurred: " + e.getMessage());
+	    }
 	}
+
 	
 	public void socialMedia() {
 	    Common.waitForElement(2);
@@ -347,5 +374,4 @@ public  final class FooterPage  extends FooterObjRepo{
 		// TODO Auto-generated method stub
 		return false;
 	}
-
 }

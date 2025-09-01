@@ -22,13 +22,16 @@ public final class LoginPage extends LoginObjRepository {
         PageFactory.initElements(this.driver, this);
     }
     
+    public void homeLaunch() {
+		driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
+				type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+				click(submit);
+    }
 
     public void userLogin() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-        click(submit);
-//        popup();
-        Common.waitForElement(1);
+    	
+    	homeLaunch();    
+    	Common.waitForElement(1);
         click(profile);
         Common.waitForElement(1);
         type(loginNumber, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Number"));
@@ -124,9 +127,7 @@ public final class LoginPage extends LoginObjRepository {
 //    }
 
     public void verifyFirstBuy() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
-       Common.waitForElement(5);
+    	homeLaunch();
         click(profile);
         Common.waitForElement(1);
         try {
@@ -141,8 +142,8 @@ public final class LoginPage extends LoginObjRepository {
     }
 
     public void numberFieldEmpty() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
+
         click(profile);
         click(sendotp);
 
@@ -160,8 +161,7 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void numberLessthan10Digit() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
         click(profile);
 
         String excelData = Common.getValueFromTestDataMap("Mobile Number");
@@ -180,8 +180,7 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void numberMOrethan10() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
         click(profile);
 
         String excelData = Common.getValueFromTestDataMap("Mobile Number");
@@ -196,8 +195,8 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void numberWithNonNumeric() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
+
         click(profile);
 
         String excelData = Common.getValueFromTestDataMap("Mobile Number");
@@ -217,10 +216,8 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void numberWith123() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
         click(profile);
-
         String excelData = Common.getValueFromTestDataMap("Mobile Number");
         type(loginNumber, excelData);
 
@@ -233,8 +230,8 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void newNumber() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
+
         click(profile);
 //        Common.waitForElement(5);
 
@@ -259,8 +256,8 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void numberSpecialSymbol() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
+
         click(profile);
 
         String excelData = Common.getValueFromTestDataMap("Mobile Number");
@@ -278,8 +275,8 @@ public final class LoginPage extends LoginObjRepository {
     }
 
     public void numberwithSpaces() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
+
         click(profile);
 
         String excelData = Common.getValueFromTestDataMap("Mobile Number");
@@ -304,8 +301,8 @@ public final class LoginPage extends LoginObjRepository {
 
 
     public void mailLogin() {
-        driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-        popup();
+    	homeLaunch();
+
         click(profile);
 //        Common.waitForElement(5);
         click(mailIcon);
@@ -315,8 +312,8 @@ public final class LoginPage extends LoginObjRepository {
     public void faceBookLink() {
         try {
             // Step 1: Navigate to Application and Open Facebook Login
-            driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-            popup();
+        	homeLaunch();
+
             Common.waitForElement(5);
             click(profile);
             Common.waitForElement(2);

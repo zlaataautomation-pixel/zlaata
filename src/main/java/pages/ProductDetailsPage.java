@@ -3,18 +3,25 @@ package pages;
 import java.time.Duration; // CORRECT
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
+
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.OutputType;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.cucumber.java.Scenario;
@@ -34,17 +41,40 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 		actions.moveToElement(shopMenu);
 		actions.moveToElement(category).click().build().perform();
 		actions.moveToElement(sortBy).click().build().perform();
-		actions.moveToElement(sortByPriceHightoLow).click().build().perform();
+		click(sortByPriceHightoLow);
 
-		List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
+		//		List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
+		//		Collections.shuffle(clickRandomProduct);
+		//
+		//		if (!clickRandomProduct.isEmpty()) {
+		//			WebElement randomProduct = clickRandomProduct.get(0);
+		//			currentProductName = productListingName.getText().trim().replaceAll("\\s+", " ").toLowerCase();
+		//			actions.moveToElement(randomProduct).click().build().perform();
+		//
+		//		}
+
+		// Get only in-stock products (skip OUT OF STOCK)
+		List<WebElement> clickRandomProduct = driver.findElements(By.xpath(
+				"//div[@class='product_list_cards_list '][not(.//h2[@class='product_list_cards_out_of_stock_heading' and normalize-space(text())='OUT OF STOCK'])]"
+				));
+
+		// Shuffle to randomize order
 		Collections.shuffle(clickRandomProduct);
 
 		if (!clickRandomProduct.isEmpty()) {
 			WebElement randomProduct = clickRandomProduct.get(0);
-			currentProductName = productListingName.getText().trim().replaceAll("\\s+", " ").toLowerCase();
+
+			// Get the product name directly from this product card
+			currentProductName = randomProduct.getText().trim().replaceAll("\\s+", " ").toLowerCase();
+
+			// Click on the selected product
 			actions.moveToElement(randomProduct).click().build().perform();
 
+			//		    System.out.println("✅ Selected random in-stock product: " + currentProductName);
+		} else {
+			System.err.println("⚠️ No in-stock products available to click.");
 		}
+
 	}
 
 
@@ -85,7 +115,7 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 		if (!promotionalPriceElement.isEmpty()) {
 			PricesText = promotionalPriceElement.get(0).getText().replaceAll("[^0-9]", "");
 		} else {
-			PricesText = currentPrice.getText().replaceAll("[^0-9]", "");
+			PricesText = normalPricePDP.getText().replaceAll("[^0-9]", "");
 		}
 
 		String actualPricesText = actualPrice.getText().replaceAll("[^0-9]", "");
@@ -190,338 +220,213 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 			backArrowElements.get(0).click();
 		}
 	}
-
 	public void wishList() {
-		ProductDetailsPage productPage = new ProductDetailsPage(driver);
+		
+		    LoginPage login = new LoginPage(driver);
+		    ProductDetailsPage productPage = new ProductDetailsPage(driver);
+		    
+		    // Step 1: Login
+
+			    login.userLogin();
+			    Common.waitForElement(2);
+			    RandomProduct();
+			    String productName = productPage.productPrice.findElement(By.xpath(".//h4[@class='prod_name']")).getText().trim();
+			    System.out.println("Product details Product Name is: " + productName);
+
+			    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+		    // Step 5: Check if the product is already in the wishlist
+		    WebElement wishlistBtn = productPage.productPrice.findElement(By.xpath("//div[@class='prod_main_details']//div[contains(@class,'prod_wishlist_btn')]"));
+		    String wishlistClass = wishlistBtn.getAttribute("class");
+
+		    if (wishlistClass.contains("liked")) {
+		        // If the product is already in the wishlist, remove it and re-add
+		        System.out.println("💔 Wishlist already selected. Removing...");
+		        clickUsingJavaScript(wishlistBtn);
+		        Common.waitForElement(2);
+		        System.out.println("💖 Wishlist re-added.");
+		        clickUsingJavaScript(wishlistBtn); // Re-add
+		    } else {
+		        // If the product is not in the wishlist, add it
+		        System.out.println("✅ Product not in wishlist. Adding...");
+		        clickUsingJavaScript(wishlistBtn);
+		    }
+
+		    // Step 6: Close the browser or proceed with any other action
+		    System.out.println("Process completed for product: " + productName);
+		    driver.quit(); // Close the browser (optional, if you want to close the session)
+		}
+
+	public void verifyBestPriceCalculation() {
 		LoginPage login = new LoginPage(driver);
 		login.userLogin();
-		Common.waitForElement(2);
-		RandomProduct();
-		String productName = productPage.productPrice.findElement(By.xpath(".//h4[@class='prod_name']")).getText().trim();
-		System.out.println("Product details Product Name is: " + productName);
-//		WebElement wishlistBtn = productPage.productPrice.findElement(By.xpath("//div[@class='prod_main_details']//div[@class='prod_wishlist_btn Cls_prod_wishlist_btn']"));
-//		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", wishlistBtn);
-//		clickUsingJavaScript(wishlistBtn);
-//		Common.waitForElement(2);
-		
-		
-		
-//		// Click wishlist icon to navigate
-//		productPage.wishlistIcon.click();
-		
-		new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		// Use flexible locator that always finds the wishlist button (whether liked or not)
-		WebElement wishlistBtn = productPage.productPrice.findElement(
-		    By.xpath("//div[@class='prod_main_details']//div[contains(@class,'prod_wishlist_btn')]")
-		);
-
-		// Check class attribute
-		String wishlistClass = wishlistBtn.getAttribute("class");
-//		System.out.println("🔍 Wishlist button class: " + wishlistClass);
-
-		if (!wishlistClass.contains("liked")) {
-		    // 👉 Case: Wishlist not selected — click to add
-		    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", wishlistBtn);
-		    clickUsingJavaScript(wishlistBtn);
-		    Common.waitForElement(2);
-		    System.out.println("✅ Wishlist was not highlighted. Product added.");
-		    productPage.wishlistIcon.click();
-		} else {
-		    // 👉 Case: Wishlist already selected — remove it
-		    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", wishlistBtn);
-		    clickUsingJavaScript(wishlistBtn);  // remove
-		    System.out.println("💔 Wishlist already selected. Removed.");
-		    Common.waitForElement(2);
-
-		    // 👉 Re-locate button after DOM change
-		    WebElement reAddBtn = productPage.productPrice.findElement(
-		        By.xpath("//div[@class='prod_main_details']//div[contains(@class,'prod_wishlist_btn')]")
-		    );
-		    clickUsingJavaScript(reAddBtn);  // re-add
-		    System.out.println("💖 Wishlist re-added.");
-		    Common.waitForElement(2);
-		    productPage.wishlistIcon.click();
-		}
-	
 		Common.waitForElement(3);
-
-		// Verify product present in wishlist
-		boolean found = false;
-		for (WebElement product : productPage.wishlistProduct) {
-			if (product.getText().trim().equalsIgnoreCase(productName)) {
-				found = true;
-				break;
-			}
-		}
-
-		if (found) {
-			System.out.println("✅ Product Name added to WishList is: " + productName);
-			System.out.println("successfully moved ");
-		} else {
-			System.out.println("❌ Product '" + productName + "' NOT found in wishlist.");
-		}
-	}
-
-
-		public void verifyBestPriceCalculation() {
-			LoginPage login = new LoginPage(driver);
-			login.userLogin();
-			Common.waitForElement(3);
-			Actions actions = new Actions(driver);
-			// Step 0: Clear cart before starting
-			click(bagIcon);
-			Common.waitForElement(2);
-			List<WebElement> removeIcons = driver.findElements(By.xpath("//div[@title='Delete']"));
-			for (WebElement removeBtn : removeIcons) {
-				Common.waitForElement(2);
-				removeBtn.click();
-				Common.waitForElement(5);
-			}
-			click(closeBag); // Close cart and go back
-			Common.waitForElement(2);
-			// Step 1: Navigate to product listing
-			actions.moveToElement(shopMenu).moveToElement(category).click().build().perform();
-			Common.waitForElement(2);
-			// Step 2: Sort by "Price: Low to High"
-			click(sortBy);
-			Common.waitForElement(1);
-			actions.moveToElement(sortByPriceLowtoHigh).click().build().perform();
-			Common.waitForElement(2);
-			// Step 3: Add lowest priced product
-			List<WebElement> allProducts = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
-			if (allProducts.isEmpty()) {
-				System.out.println(":x: No products found.");
-				return;
-			}
-			WebElement lowestProduct = allProducts.get(0);
-			String currentProductName = lowestProduct.findElement(By.xpath(".//h2[@class='product_list_cards_heading']")).getText().trim().toLowerCase();
-			System.out.println(":shopping_trolley: Lowest Product Selected: " + currentProductName);
-			actions.moveToElement(lowestProduct).click().build().perform();
-			Common.waitForElement(2);
-			// Step 4: Validate PDP product name
-			String pdpProductName = productName.getText().trim().toLowerCase();
-			if (!pdpProductName.contains(currentProductName)) {
-				System.out.println(":x: Product mismatch between listing and detail page.");
-				return;
-			}
-			// Step 5: Get promotional or normal price
-			double price = 0;
-			try {
-				WebElement promoPrice = driver.findElement(By.xpath("//span[@class='product_list_cards_actual_price_txt']"));
-				price = Double.parseDouble(promoPrice.getText().replace("₹", "").replace(",", "").trim());
-				System.out.println(":moneybag: Promotional Product Price: ₹" + price);
-			} catch (NoSuchElementException e1) {
-				WebElement regularPrice = driver.findElement(By.xpath("//span[@class='product_list_cards_actual_price_txt']"));
-				price = Double.parseDouble(regularPrice.getText().replace("₹", "").replace(",", "").trim());
-				System.out.println(":moneybag: Regular Product Price: ₹" + price);
-			}
-			// Step 6: Add product to cart
-			click(addCartButton);
-			Common.waitForElement(2);
-			click(bagIcon);
-			Common.waitForElement(2);
-			click(buyNowButton);
-			// Step 7: Expand all coupons if more than 3
-//			List<WebElement> availableCoupons = driver.findElements(By.xpath("//div[@class='available_offer_list']"));
-//			WebElement showMoreOffers = driver.findElement(By.xpath("//button[@class='view_more_coupon_btn Cls_viewmore']"));
-//			if (showMoreOffers.isDisplayed()) {
-//				try {
-//					
-//					click(showMoreOffers);
-//					Common.waitForElement(2);
-//				} catch (Exception e) {
-//					System.out.println(":warning: Unable to click 'Available Offers' – maybe already expanded.");
-//				}
-//			}
-			List<WebElement> offerButtons = driver.findElements(By.xpath("//button[@class='view_more_coupon_btn Cls_viewmore']"));
-
-			if (!offerButtons.isEmpty()) {
-			    WebElement showMoreOffers = offerButtons.get(0);
-			    
-			    if (showMoreOffers.isDisplayed()) {
-			        try {
-			            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", showMoreOffers);
-			            Common.waitForElement(1);
-
-			            ((JavascriptExecutor) driver).executeScript("arguments[0].click();", showMoreOffers); // safe click
-			            System.out.println("✅ Clicked on 'View More Offers' button.");
-			            Common.waitForElement(2);
-			        } catch (Exception e) {
-			            System.out.println("⚠️ Exception while clicking 'View More Offers': " + e.getMessage());
-			        }
-			    } else {
-			        System.out.println("⚠️ Button found but not visible.");
-			    }
-			} else {
-			    // 👉 Else block when button is not in DOM at all
-			    System.out.println("ℹ️ 'View More Offers' button not present – skipping click.");
-			    
-			    // You can write fallback logic here if needed:
-			    // e.g., check coupons, log, or continue with test
-			}
-			// Step 8: Try applying all coupons and print validation
-			List<WebElement> allCouponButtons = driver.findElements(By.xpath("//button[@class='offer_list_item_apply_btn Cls_apply_coupon']"));
-			List<WebElement> couponCodes = driver.findElements(By.xpath("//div[@class='available_offer_card']//div[@class='offer_list_item_heading']"));
-			System.out.println(":clipboard: Applying all coupons on low price product...");
-			for (int i = 0; i < couponCodes.size(); i++) {
-				String code = couponCodes.get(i).getText().trim();
-				click(allCouponButtons.get(i));
-				Common.waitForElement(2);
-				String validationMsg = "";
-				try {
-					validationMsg = driver.findElement(By.xpath("//p[contains(@class,'coupon_apply_msg')]")).getText();
-				} catch (Exception ignored) {}
-				System.out.println(":bookmark: Coupon: " + code + " → Validation: " + validationMsg);
-				// Remove coupon if apply was successful
-				try {
-					WebElement removeCoupon = driver.findElement(By.xpath("//button[@class='coupon_apply_btn Cls_coupon_apply_rmv_btn']"));
-					if (removeCoupon.isDisplayed()) {
-						removeCoupon.click();
-						Common.waitForElement(1);
-					}
-				} catch (Exception e) {
-					// Ignore if remove not present
-				}
-			}
-			// Step 9: Go back and sort "Price: High to Low"
-			driver.navigate().back();
-			driver.navigate().back();
-			Common.waitForElement(2);
-			click(sortBy);
-			actions.moveToElement(sortByPriceHightoLow).click().build().perform();
-			Common.waitForElement(2);
-			// Step 10: Pick product > ₹999
-			List<WebElement> highPriceProducts = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
-			for (WebElement prod : highPriceProducts) {
-				try {
-					double highPrice = Double.parseDouble(prod.findElement(By.xpath(".//span[@class='product_list_cards_actual_price_txt']")).getText().replace("₹", "").replace(",", "").trim());
-					if (highPrice > 999) {
-						actions.moveToElement(prod).click().build().perform();
-						Common.waitForElement(2);
-						break;
-					}
-				} catch (Exception ignored) {}
-			}
-			// Step 11: Get high-price product actual price
-			double highPrice = 0;
-			try {
-				highPrice = Double.parseDouble(driver.findElement(By.xpath("//div[@class='prod_current_price']")).getText().replace("₹", "").replace(",", "").trim());
-			} catch (Exception e) {
-				highPrice = Double.parseDouble(driver.findElement(By.xpath("//span[@class='product_list_cards_actual_price_txt']")).getText().replace("₹", "").replace(",", "").trim());
-			}
-			System.out.println(":package: High Price Product: ₹" + highPrice);
-			// Step 12: Validate Best Price logic
-			System.out.println(":receipt: Validating Best Price Calculation...");
-			List<WebElement> couponCodeElements = driver.findElements(By.xpath("//span[@class='prod_bp_coupen']"));
-			List<WebElement> bestPriceElements = driver.findElements(By.xpath("//span[@class='prod_bp_value']"));
-			for (int i = 0; i < couponCodeElements.size(); i++) {
-				String coupon = couponCodeElements.get(i).getText().trim();
-				double bestPrice = Double.parseDouble(bestPriceElements.get(i).getText().replace("₹", "").replace(",", "").trim());
-				double expectedPrice = highPrice;
-				if (coupon.equals("THANKU100")) {
-					if (highPrice > 999) expectedPrice -= 100;
-				} else if (coupon.equals("FIRSTBUY200")) {
-					if (highPrice > 1999) expectedPrice -= 200;
-				} else if (coupon.equals("GRAB300")) {
-					expectedPrice -= 300;
-				} else if (coupon.equals("GRAB500")) {
-					expectedPrice -= 500;
-				} else if (coupon.contains("%")) {
-					try {
-						double percent = Double.parseDouble(coupon.replace("%", ""));
-						expectedPrice -= (highPrice * percent / 100);
-					} catch (Exception ignored) {}
-				}
-				expectedPrice = Math.round(expectedPrice);
-				System.out.println("\nCoupon: " + coupon);
-				System.out.println("Expected Best Price: ₹" + expectedPrice + ", Actual: ₹" + bestPrice);
-				if ((int) expectedPrice == (int) bestPrice) {
-					System.out.println(":white_tick: Best price matched.");
-				} else {
-					System.out.println(":x: Mismatch → Expected: ₹" + expectedPrice + ", Actual: ₹" + bestPrice);
-				}
-			}
-		}
-
-
-
-
-
-
-
-
-
-
-
-	public void verifyColorOptions() {
 		Actions actions = new Actions(driver);
-		Common.waitForElement(3);
 		actions.moveToElement(shopMenu);
-		actions.moveToElement(category).click().build().perform();
-
-		List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
-		Collections.shuffle(clickRandomProduct);
-
-		if (!clickRandomProduct.isEmpty()) {
-			WebElement randomProduct = clickRandomProduct.get(0);
-			WebElement productNameInListing = randomProduct.findElement(By.xpath(".//h2[@class='product_list_cards_heading']"));
-			currentProductName = productNameInListing.getText().trim().replaceAll("\\s+", " ").toLowerCase();
-			System.out.println("Product Name in Listing page: " + currentProductName);
-			actions.moveToElement(randomProduct).click().build().perform();
-
+		actions.moveToElement(shopMenu).moveToElement(category).click().build().perform();
+		Common.waitForElement(2);
+		// Step 2: Sort by "Price: Low to High"
+		click(sortBy);
+		Common.waitForElement(1);
+		actions.moveToElement(sortByPriceLowtoHigh).click().build().perform();
+		Common.waitForElement(2);
+		// Step 3: Add lowest priced product
+		List<WebElement> allProducts = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
+		if (allProducts.isEmpty()) {
+			System.out.println(":x: No products found.");
+			return;
 		}
-		String productNameOnPage = productName.getText().trim().replaceAll("\\s+", " ").toLowerCase();
-		if (productNameOnPage.contains(currentProductName) || currentProductName.contains(productNameOnPage)) {
-			System.out.println("Product Name: " + productName.getText());
+		WebElement lowestProduct = allProducts.get(0);
+		String currentProductName = lowestProduct.findElement(By.xpath(".//h2[@class='product_list_cards_heading']")).getText().trim().toLowerCase();
+		System.out.println(":shopping_trolley: Lowest Product Selected: " + currentProductName);
+		actions.moveToElement(lowestProduct).click().build().perform();
+		Common.waitForElement(2);
+		// Step 4: Validate PDP product name
+		String pdpProductName = productName.getText().trim().toLowerCase();
+		if (!pdpProductName.contains(currentProductName)) {
+			System.out.println(":x: Product mismatch between listing and detail page.");
+			return;
+		}
+		// Step 5: Get promotional or normal price
+		double price = 0;
+		try {
+			WebElement promoPrice = driver.findElement(By.xpath("//span[@class='product_list_cards_actual_price_txt']"));
+			price = Double.parseDouble(promoPrice.getText().replace("₹", "").replace(",", "").trim());
+			System.out.println(":moneybag: Promotional Product Price: ₹" + price);
+		} catch (NoSuchElementException e1) {
+			WebElement regularPrice = driver.findElement(By.xpath("//span[@class='product_list_cards_actual_price_txt']"));
+			price = Double.parseDouble(regularPrice.getText().replace("₹", "").replace(",", "").trim());
+			System.out.println(":moneybag: Regular Product Price: ₹" + price);
+		}
+		// Step 6: Add product to cart
+		click(addCartButton);
+		Common.waitForElement(2);
+		click(bagIcon);
+		Common.waitForElement(2);
+		click(buyNowButton);
+		// Step 7: Expand all coupons if more than 3
+		//			List<WebElement> availableCoupons = driver.findElements(By.xpath("//div[@class='available_offer_list']"));
+		//			WebElement showMoreOffers = driver.findElement(By.xpath("//button[@class='view_more_coupon_btn Cls_viewmore']"));
+		//			if (showMoreOffers.isDisplayed()) {
+		//				try {
+		//					
+		//					click(showMoreOffers);
+		//					Common.waitForElement(2);
+		//				} catch (Exception e) {
+		//					System.out.println(":warning: Unable to click 'Available Offers' – maybe already expanded.");
+		//				}
+		//			}
+		List<WebElement> offerButtons = driver.findElements(By.xpath("//button[@class='view_more_coupon_btn Cls_viewmore']"));
 
-			double initialPrice = 0;
-			if (!promotionalPriceElement.isEmpty()) {
-				initialPrice = Double.parseDouble(promotionalPriceElement.get(0).getText().replace("₹", "").replace(",", "").trim());
-				System.out.println("Product is on promotional price: ₹" + initialPrice);
-			} else if (currentPrice.isDisplayed()) {
-				initialPrice = Double.parseDouble(currentPrice.getText().replace("₹", "").replace(",", "").trim());
-				System.out.println("Product is on normal price: ₹" + initialPrice);
-			} else {
-				System.out.println("Price not found");
-				return;
-			}
+		if (!offerButtons.isEmpty()) {
+			WebElement showMoreOffers = offerButtons.get(0);
 
-			List<WebElement> colorOptions = driver.findElements(By.xpath("//div[@class='prod_color_name Cls_prod_color_name']"));
-			System.out.println("Available colors: ");
-			for (WebElement color : colorOptions) {
-				System.out.print(color.getText() + " , ");
-			}
-			System.out.println();
+			if (showMoreOffers.isDisplayed()) {
+				try {
+					((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", showMoreOffers);
+					Common.waitForElement(1);
 
-			String initialColor = colorOptions.get(0).getText();
-			System.out.println("Initial color: " + initialColor);
-			System.out.println(initialColor + " " + productName.getText() + " - Product price is Rs " + initialPrice);
-
-			for (int i = 1; i < colorOptions.size(); i++) {
-				colorOptions.get(i).click();
-				String clickedColor = colorOptions.get(i).getText();
-				System.out.println("Clicked color: " + clickedColor);
-				String changedProductName = productName.getText().trim().replaceAll("\\s+", " ").toLowerCase();
-				System.out.println("The product name changed - " + changedProductName);
-
-				double changedPrice = 0;
-				if (!promotionalPriceElement.isEmpty()) {
-					changedPrice = Double.parseDouble(promotionalPriceElement.get(0).getText().replace("₹", "").replace(",", "").trim());
-					System.out.println(clickedColor + " " + changedProductName + " - Product price is Rs " + changedPrice);
-				} else if (currentPrice.isDisplayed()) {
-					changedPrice = Double.parseDouble(currentPrice.getText().replace("₹", "").replace(",", "").trim());
-					System.out.println(" " + changedProductName + " - Product price is Rs " + changedPrice);
-				} else {
-					System.out.println("Price not found");
+					((JavascriptExecutor) driver).executeScript("arguments[0].click();", showMoreOffers); // safe click
+					System.out.println("✅ Clicked on 'View More Offers' button.");
+					Common.waitForElement(2);
+				} catch (Exception e) {
+					System.out.println("⚠️ Exception while clicking 'View More Offers': " + e.getMessage());
 				}
+			} else {
+				System.out.println("⚠️ Button found but not visible.");
 			}
 		} else {
-			System.out.println("Product name mismatch");
+			// 👉 Else block when button is not in DOM at all
+			System.out.println("ℹ️ 'View More Offers' button not present – skipping click.");
+
+			// You can write fallback logic here if needed:
+			// e.g., check coupons, log, or continue with test
+		}
+		// Step 8: Try applying all coupons and print validation
+		List<WebElement> allCouponButtons = driver.findElements(By.xpath("//button[@class='offer_list_item_apply_btn Cls_apply_coupon']"));
+		List<WebElement> couponCodes = driver.findElements(By.xpath("//div[@class='available_offer_card']//div[@class='offer_list_item_heading']"));
+		System.out.println(":clipboard: Applying all coupons on low price product...");
+		for (int i = 0; i < couponCodes.size(); i++) {
+			String code = couponCodes.get(i).getText().trim();
+			click(allCouponButtons.get(i));
+			Common.waitForElement(2);
+			String validationMsg = "";
+			try {
+				validationMsg = driver.findElement(By.xpath("//p[contains(@class,'coupon_apply_msg')]")).getText();
+			} catch (Exception ignored) {}
+			System.out.println(":bookmark: Coupon: " + code + " → Validation: " + validationMsg);
+			// Remove coupon if apply was successful
+			try {
+				WebElement removeCoupon = driver.findElement(By.xpath("//button[@class='coupon_apply_btn Cls_coupon_apply_rmv_btn']"));
+				if (removeCoupon.isDisplayed()) {
+					removeCoupon.click();
+					Common.waitForElement(1);
+				}
+			} catch (Exception e) {
+				// Ignore if remove not present
+			}
+		}
+		// Step 9: Go back and sort "Price: High to Low"
+		driver.navigate().back();
+		driver.navigate().back();
+		Common.waitForElement(2);
+		click(sortBy);
+		actions.moveToElement(sortByPriceHightoLow).click().build().perform();
+		Common.waitForElement(2);
+		// Step 10: Pick product > ₹999
+		List<WebElement> highPriceProducts = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
+		for (WebElement prod : highPriceProducts) {
+			try {
+				double highPrice = Double.parseDouble(prod.findElement(By.xpath(".//span[@class='product_list_cards_actual_price_txt']")).getText().replace("₹", "").replace(",", "").trim());
+				if (highPrice > 999) {
+					actions.moveToElement(prod).click().build().perform();
+					Common.waitForElement(2);
+					break;
+				}
+			} catch (Exception ignored) {}
+		}
+		// Step 11: Get high-price product actual price
+		double highPrice = 0;
+		try {
+			highPrice = Double.parseDouble(driver.findElement(By.xpath("//div[@class='prod_current_price']")).getText().replace("₹", "").replace(",", "").trim());
+		} catch (Exception e) {
+			highPrice = Double.parseDouble(driver.findElement(By.xpath("//span[@class='product_list_cards_actual_price_txt']")).getText().replace("₹", "").replace(",", "").trim());
+		}
+		System.out.println(":package: High Price Product: ₹" + highPrice);
+		// Step 12: Validate Best Price logic
+		System.out.println(":receipt: Validating Best Price Calculation...");
+		List<WebElement> couponCodeElements = driver.findElements(By.xpath("//span[@class='prod_bp_coupen']"));
+		List<WebElement> bestPriceElements = driver.findElements(By.xpath("//span[@class='prod_bp_value']"));
+		for (int i = 0; i < couponCodeElements.size(); i++) {
+			String coupon = couponCodeElements.get(i).getText().trim();
+			double bestPrice = Double.parseDouble(bestPriceElements.get(i).getText().replace("₹", "").replace(",", "").trim());
+			double expectedPrice = highPrice;
+			if (coupon.equals("THANKU100")) {
+				if (highPrice > 999) expectedPrice -= 100;
+			} else if (coupon.equals("FIRSTBUY200")) {
+				if (highPrice > 1999) expectedPrice -= 200;
+			} else if (coupon.equals("GRAB300")) {
+				expectedPrice -= 300;
+			} else if (coupon.equals("GRAB500")) {
+				expectedPrice -= 500;
+			} else if (coupon.contains("%")) {
+				try {
+					double percent = Double.parseDouble(coupon.replace("%", ""));
+					expectedPrice -= (highPrice * percent / 100);
+				} catch (Exception ignored) {}
+			}
+			expectedPrice = Math.round(expectedPrice);
+			System.out.println("\nCoupon: " + coupon);
+			System.out.println("Expected Best Price: ₹" + expectedPrice + ", Actual: ₹" + bestPrice);
+			if ((int) expectedPrice == (int) bestPrice) {
+				System.out.println(":white_tick: Best price matched.");
+			} else {
+				System.out.println(":x: Mismatch → Expected: ₹" + expectedPrice + ", Actual: ₹" + bestPrice);
+			}
 		}
 	}
 
-
+	
 	public void colordropDown() {
 		RandomProduct();
 		Common.waitForElement(1);
@@ -539,34 +444,175 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 		}
 
 	}
+	public void verifyColorOptions() throws InterruptedException {
+	    Actions actions = new Actions(driver);
+	    Common.waitForElement(3);
+
+	    // ---- Navigate to category ----
+	    actions.moveToElement(shopMenu).moveToElement(category).click().build().perform();
+
+	    // ---- Pick random product ----
+	    List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='zl-prod-color-swatches']"));
+	    Collections.shuffle(clickRandomProduct);
+
+	    if (!clickRandomProduct.isEmpty()) {
+	        WebElement randomProduct = clickRandomProduct.get(0);
+	        actions.moveToElement(randomProduct).click().build().perform();
+	        System.out.println("✅ Random product clicked from listing.\n");
+	    } else {
+	        System.out.println("⚠️ No products found in listing.");
+	        return;
+	    }
+
+	    // ---- Get all color swatches ----
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	    List<WebElement> allColors = driver.findElements(By.xpath("//div[@class='prod_color_options Cls_prod_color_options']/div"));
+	    System.out.print("🎨 Available colors: ");
+	    StringBuilder colors = new StringBuilder();
+	    for (WebElement color : allColors) {
+	        colors.append(color.getText().trim()).append(", ");
+	    }
+	    System.out.println(colors.toString().replaceAll(", $", "") + "\n");
+
+	    // If only one color is available, no need to click
+	    if (allColors.size() == 1) {
+	        WebElement color = allColors.get(0);
+	        String colorName = color.getText().trim();
+	        printProductDetails(colorName, true);  // Initial color
+	    } else {
+	        // Track printed colors to avoid duplication
+	        Set<String> printedColors = new HashSet<>();
+	        
+	        // Check if there is a color already selected (active class)
+	        WebElement initialColor = null;
+	        for (WebElement color : allColors) {
+	            if (color.getAttribute("class").contains("active")) {  // Check for active class
+	                initialColor = color;
+	                break;
+	            }
+	        }
+
+	        // If an initial color is selected, print details
+	        if (initialColor != null) {
+	            String colorName = initialColor.getText().trim();
+	            System.out.println("Initial color: " + colorName);
+	            printProductDetails(colorName, true);  // Print details for initial color
+	            printedColors.add(colorName);  // Mark initial color as printed
+	        }
+
+	        // Loop through all colors, skipping the initial color already printed
+	        for (int i = 0; i < allColors.size(); i++) {
+	            WebElement color = allColors.get(i);
+	            String colorName = color.getText().trim();
+
+	            // Skip the color if it has already been printed
+	            if (printedColors.contains(colorName)) {
+	                continue; // Skip already printed colors
+	            }
+
+	            // Scroll and click color
+	            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'});", color);
+
+	            // Retry the click action with a try-catch for StaleElementReferenceException
+	            try {
+	                color.click();
+	            } catch (StaleElementReferenceException e) {
+	                // Re-locate the element before retrying
+	                allColors = driver.findElements(By.xpath("//div[@class='prod_color_options Cls_prod_color_options']/div"));
+	                color = allColors.get(i);  // Re-fetch the element after it's updated
+	                color.click();  // Retry clicking the color
+	            } catch (ElementClickInterceptedException e) {
+	                // Retry clicking the color if click is intercepted
+	                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", color);
+	            }
+
+	            // Wait for the color swatch to be updated
+	            wait.until(ExpectedConditions.stalenessOf(color));  // Ensure element is stale before interacting again
+
+	            // Re-fetch color options after interaction
+	            allColors = driver.findElements(By.xpath("//div[@class='prod_color_options Cls_prod_color_options']/div"));
+
+	            // Print details for the new color after switching
+	            printProductDetails(colorName, false);  // False means it's not the initial color
+
+	            // Mark this color as printed
+	            printedColors.add(colorName);
+	        }
+	    }
+	}
+
+	private void printProductDetails(String colorName, boolean isInitial) {
+	    // Re-fetch product details for the current selected color
+	    String productNameText = driver.findElement(By.xpath("//h4[@class='prod_name']")).getText().trim();
+	    double normalPrice = Double.parseDouble(driver.findElement(By.xpath("//div[@class='prod_current_price']"))
+	            .getText().replace("₹", "").replace(",", "").trim());
+	    double discount = 0;
+	    try {
+	        String discountText = driver.findElement(By.xpath("//div[@class='prod_discount_percentage']"))
+	                .getText().replaceAll("[^0-9]", "");
+	        if (!discountText.isEmpty()) discount = Double.parseDouble(discountText);
+	    } catch (Exception e) { }
+
+	    double actualPriceValue = Double.parseDouble(driver.findElement(By.xpath("//div[@class='prod_actual_price']"))
+	            .getText().replace("₹", "").replace(",", "").trim());
+
+	    // Print product details for the selected color
+	    String result = "Color switched to " + colorName + " | Product Name: " + productNameText +
+	            " | Price: ₹" + normalPrice + " | Discount: " + discount + "%" +
+	            " | Actual: ₹" + actualPriceValue;
+
+	    if (isInitial) {
+	        System.out.println(result);  // Initial color details
+	    } else {
+	        System.out.println(result);  // Non-initial color details
+	    }
+	}
+
+	
 
 	public void sizeChart(Scenario scenario) {
-		RandomProduct();
-		Common.waitForElement(1);
-		Actions actions = new Actions(driver);
+	    RandomProduct();
+	    Common.waitForElement(1);
+	    Actions actions = new Actions(driver);
 
-		try {
-			if (colorDropDown.isDisplayed()) {
-				actions.moveToElement(sizeChart).click().build().perform();
-				Common.waitForElement(1);
-				byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-				scenario.attach(screenshot, "image/png", "Initial Screenshot");
-				Common.waitForElement(1);
-				if (sizeChartBottom.isDisplayed()) {
-					Common.waitForElement(2);
-					clickUsingJavaScript(sizeChartBottom);
-					Common.waitForElement(3);
-					scenario.attach(screenshot, "image/png", "Bottom Screenshot");
-					System.out.println("Screen Shot attached for Size chart");
-				}
-			} else {
-				scenario.log("⚠️ Size chart is null, screenshot not taken.");
-			}
-		} catch (Exception e) {
-			scenario.log("❌ Failed to capture screenshot : " + e.getMessage());
-			e.printStackTrace();
-		}
+	    try {
+	        // Wait for color dropdown and size chart to be visible and clickable
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+	        if (colorDropDown.isDisplayed()) {
+	            // Wait until size chart is clickable
+	            wait.until(ExpectedConditions.elementToBeClickable(sizeChart));
+
+	            // Perform the click action on the size chart
+	            actions.moveToElement(sizeChart).click().build().perform();
+	            Common.waitForElement(1);
+
+	            // Capture and attach the initial screenshot
+	            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	            scenario.attach(screenshot, "image/png", "Initial Screenshot");
+
+	            Common.waitForElement(1);
+	            if (sizeChartBottom.isDisplayed()) {
+	                // Wait for the size chart bottom element to be clickable
+	                wait.until(ExpectedConditions.elementToBeClickable(sizeChartBottom));
+
+	                Common.waitForElement(2);
+	                clickUsingJavaScript(sizeChartBottom);
+	                Common.waitForElement(3);
+
+	                // Attach bottom screenshot after interacting with size chart
+	                scenario.attach(screenshot, "image/png", "Bottom Screenshot");
+	                System.out.println("Screen Shot attached for Size chart");
+	            }
+	        } else {
+	            scenario.log("⚠️ Size chart is null, screenshot not taken.");
+	        }
+	    } catch (Exception e) {
+	        scenario.log("❌ Failed to capture screenshot : " + e.getMessage());
+	        e.printStackTrace();
+	    }
 	}
+
 
 	public void verifySizeOptions() {
 		RandomProduct();
@@ -623,34 +669,55 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 			System.out.println("No sizes available");
 		}
 	}
-	public void askUsAnything(Scenario scenario) {
-		Actions action = new Actions(driver);
-		LoginPage login = new LoginPage(driver);
-		login.userLogin();
-		Common.waitForElement(2);
-		RandomProduct();
-		try {
-			if (askUsAnythings.isDisplayed()) {
-				click(askUsAnythings);
-				click(askUsAnythingsDescription);
-				Common.waitForElement(5);
-				type(askUsAnythingsDescription,Common.getValueFromTestDataMap("Description"));
-				Common.waitForElement(2);
-				action.moveToElement(askUsSend).build().perform();
-				byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-				scenario.attach(screenshot, "image/png", "Initial Screenshot");
+	//	public void askUsAnything(Scenario scenario) {
+	//		Actions action = new Actions(driver);
+	//		LoginPage login = new LoginPage(driver);
+	//		login.userLogin();
+	//		Common.waitForElement(2);
+	//		RandomProduct();
+	//		try {
+	//			if (askUsAnythings.isDisplayed()) {
+	//				click(askUsAnythings);
+	//				click(askUsAnythingsDescription);
+	//				Common.waitForElement(5);
+	//				type(askUsAnythingsDescription,Common.getValueFromTestDataMap("Description"));
+	//				Common.waitForElement(2);
+	//				action.moveToElement(askUsSend).build().perform();
+	//				byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	//				scenario.attach(screenshot, "image/png", "Initial Screenshot");
+	//
+	//			}
+	//			else {
+	//				scenario.log("⚠️ Ask us anything is null, screenshot not taken.");
+	//			}
+	//		} catch (Exception e) {
+	//			scenario.log("❌ Failed to capture screenshot : " + e.getMessage());
+	//			e.printStackTrace();
+	//		}
+	//
+	//
+	//	}
 
-			}
-			else {
-				scenario.log("⚠️ Ask us anything is null, screenshot not taken.");
-			}
-		} catch (Exception e) {
-			scenario.log("❌ Failed to capture screenshot : " + e.getMessage());
-			e.printStackTrace();
+	public void categoryName() {
+
+		RandomProduct();
+		if (detailsPageCategoryName.isDisplayed()) {
+			String categoryName = detailsPageCategoryName.getText();
+			System.out.println("Category name is: " + categoryName);
+		} else {
+			System.out.println("Category name is not displayed");
 		}
 
-
+		if (productName.isDisplayed()) { 
+			String productNameText = productName.getText(); 
+			System.out.println("Product name is: " + productNameText); 
+		} else {
+			System.out.println("Product name is not displayed");
+		}
 	}
+
+
+
 	public void addToCartButton() {
 		Actions action = new Actions(driver);
 		RandomProduct();
@@ -773,24 +840,86 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 		}
 
 	}
+	//	public void quickViewIconTryAlong(Scenario scenario) {
+	//		RandomProduct();
+	//		Common.waitForElement(1);
+	//		scrollUsingJSWindow();
+	//		Common.waitForElement(2);
+	//		Collections.shuffle(clickOnQuickViewButton);
+	//		if (!clickOnQuickViewButton.isEmpty()) {
+	//			WebElement randomIcon = clickOnQuickViewButton.get(0);
+	//			click(randomIcon);
+	//			System.out.println("Try along Quick view clicked");
+	//			Common.waitForElement(2);
+	//			byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	//			scenario.attach(screenshot, "image/png", "Initial Screenshot");
+	//		}
+	//		else {
+	//			System.out.println("Try along Quick view is not clickable");
+	//		}
+	//	}
 	public void quickViewIconTryAlong(Scenario scenario) {
-		RandomProduct();
+		RandomProduct(); // Optional: scroll to a random product
 		Common.waitForElement(1);
 		scrollUsingJSWindow();
-		Common.waitForElement(2);
-		Collections.shuffle(clickOnQuickViewButton);
-		if (!clickOnQuickViewButton.isEmpty()) {
-			WebElement randomIcon = clickOnQuickViewButton.get(0);
-			click(randomIcon);
-			System.out.println("Try along Quick view clicked");
-			Common.waitForElement(2);
-			byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
-			scenario.attach(screenshot, "image/png", "Initial Screenshot");
+		Common.waitForElement(5);
+
+		try {
+			if (productName.isDisplayed()) {
+				String productNameText = productName.getText();
+				System.out.println("Main Product Name: " + productNameText);
+			} else {
+				System.out.println("Product name element is not displayed.");
+			}
+		} catch (Exception e) {
+			System.out.println("Error fetching main product name: " + e.getMessage());
 		}
-		else {
-			System.out.println("Try along Quick view is not clickable");
+
+		for (int i = 0; i < tryAlongProducts.size(); i++) {
+			try {
+				System.out.println("Opening Try Along Product #" + (i + 1));
+				WebElement tryProduct = tryAlongProducts.get(i);
+				JavascriptExecutor js = (JavascriptExecutor) driver;
+				js.executeScript("arguments[0].click();", tryProduct);
+
+				Common.waitForElement(3); // Wait for popup
+				click(closeTheQuickViewPopup);
+				Common.waitForElement(2); // Wait before next
+			} catch (Exception e) {
+				System.out.println("Error on Try Along product #" + (i + 1) + ": " + e.getMessage());
+			}
 		}
 	}
+
+	//	    Collections.shuffle(clickOnQuickViewButton);
+	//
+	//	    if (!clickOnQuickViewButton.isEmpty()) {
+	//	        WebElement randomIcon = clickOnQuickViewButton.get(0);
+	//
+	//	        try {
+	//	            // Wait until the element is clickable
+	//	            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+	//	            wait.until(ExpectedConditions.elementToBeClickable(randomIcon));
+	//
+	//	            // Click using JavaScript to avoid interception
+	//	            JavascriptExecutor js = (JavascriptExecutor) driver;
+	//	            js.executeScript("arguments[0].click();", randomIcon);
+	//
+	//	            System.out.println("✅ Try along Quick View clicked");
+	//
+	//	            Common.waitForElement(2);
+	//	            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+	//	            scenario.attach(screenshot, "image/png", "Quick View Screenshot");
+	//
+	//	        } catch (Exception e) {
+	//	            System.out.println("❌ Failed to click Try Along Quick View: " + e.getMessage());
+	//	        }
+	//
+	//	    } else {
+	//	        System.out.println("❌ Try along Quick View is not clickable or not found.");
+	//	    }
+	//	}
+
 	public void tryAlongQuickViewClose() {
 		RandomProduct();
 		Common.waitForElement(1);
@@ -811,8 +940,6 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 		} catch (Exception e) {
 			System.out.println("Caught an exception: " + e.getMessage());
 		}
-
-
 	}
 	public void productDescriptionDropDDown() {
 		RandomProduct();
@@ -1055,54 +1182,54 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 		}
 	}
 	public void ReviewPopupWithoutEnterAllDataClickOnS() {
-	    Common.waitForElement(5);
-	    Actions actions = new Actions(driver);
-	    actions.moveToElement(shopMenu);
-	    actions.moveToElement(category).click().build().perform();
+		Common.waitForElement(5);
+		Actions actions = new Actions(driver);
+		actions.moveToElement(shopMenu);
+		actions.moveToElement(category).click().build().perform();
 
-	    List<WebElement> addProduct = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
-	    Collections.shuffle(addProduct);
+		List<WebElement> addProduct = driver.findElements(By.xpath("//div[@class='product_list_cards_list ']"));
+		Collections.shuffle(addProduct);
 
-	    if (!addProduct.isEmpty()) {
-	        WebElement randomProduct = addProduct.get(0);
-	        actions.moveToElement(randomProduct).click().build().perform();
-	        Common.waitForElement(2);
+		if (!addProduct.isEmpty()) {
+			WebElement randomProduct = addProduct.get(0);
+			actions.moveToElement(randomProduct).click().build().perform();
+			Common.waitForElement(2);
 
-	        click(clickOnWriteReviewButton);
-	        Common.waitForElement(2);
+			click(clickOnWriteReviewButton);
+			Common.waitForElement(2);
 
-	        reviewUserName.clear();
-	        reviewEmailID.clear();
-	        click(clickOnSubmitButton);
-	        Common.waitForElement(2);
+			reviewUserName.clear();
+			reviewEmailID.clear();
+			click(clickOnSubmitButton);
+			Common.waitForElement(2);
 
-	        // Scroll the popup into view (for all messages)
-	        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", validationMessageForReviewName);
-	        Common.waitForElement(1);
+			// Scroll the popup into view (for all messages)
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", validationMessageForReviewName);
+			Common.waitForElement(1);
 
-	        // Assert 1: Rating validation
-	        String actualMessage = validationMessageForRating.getText().trim();
-	        Assert.assertEquals("The rating is a required field", actualMessage);
-	        System.out.println("\u001B[32mThe validation message displayed: " + actualMessage + "\u001B[0m");
+			// Assert 1: Rating validation
+			String actualMessage = validationMessageForRating.getText().trim();
+			Assert.assertEquals("The rating is a required field", actualMessage);
+			System.out.println("\u001B[32mThe validation message displayed: " + actualMessage + "\u001B[0m");
 
-//	        // Assert 2: Review description validation
-//	        String actualMessage1 = validationMessageForReviewDescription.getText().trim();
-//	        Assert.assertEquals("Please enter a review between 3 and 500 characters.", actualMessage1);
-//	        System.out.println("\u001B[32mThe validation message displayed: " + actualMessage1 + "\u001B[0m");
+			//	        // Assert 2: Review description validation
+			//	        String actualMessage1 = validationMessageForReviewDescription.getText().trim();
+			//	        Assert.assertEquals("Please enter a review between 3 and 500 characters.", actualMessage1);
+			//	        System.out.println("\u001B[32mThe validation message displayed: " + actualMessage1 + "\u001B[0m");
 
-	        // Assert 3: Name validation
-	        String actualMessage2 = validationMessageForReviewName.getText().trim();
-	        Assert.assertEquals("Name should be between 3 and 50 characters.", actualMessage2);
-	        System.out.println("\u001B[32mThe validation message displayed: " + actualMessage2 + "\u001B[0m");
+			// Assert 3: Name validation
+			String actualMessage2 = validationMessageForReviewName.getText().trim();
+			Assert.assertEquals("Name should be between 3 and 50 characters.", actualMessage2);
+			System.out.println("\u001B[32mThe validation message displayed: " + actualMessage2 + "\u001B[0m");
 
-	        // Assert 4: Email validation
-	        reviewEmailID.clear();
-	        String actualMessage3 = validationMessageForReviewEmailID.getText().trim();
-	        Assert.assertEquals("Please enter a valid email address.", actualMessage3); // adjust this message based on actual UI
-	        System.out.println("\u001B[32mThe validation message displayed: " + actualMessage3 + "\u001B[0m");
+			// Assert 4: Email validation
+			reviewEmailID.clear();
+			String actualMessage3 = validationMessageForReviewEmailID.getText().trim();
+			Assert.assertEquals("Please enter a valid email address.", actualMessage3); // adjust this message based on actual UI
+			System.out.println("\u001B[32mThe validation message displayed: " + actualMessage3 + "\u001B[0m");
 
-	        Common.waitForElement(2);
-	    }
+			Common.waitForElement(2);
+		}
 	}
 
 

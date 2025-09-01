@@ -43,6 +43,7 @@ public class CouponFunctionality {
 	@And("User should get login popup")
 	public void user_should_get_login_popup() {
 		try {
+			
 			coupon.verifyLoginPopupAppears();
 		}
 		catch (Exception e) {

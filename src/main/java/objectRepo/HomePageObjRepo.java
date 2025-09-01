@@ -10,6 +10,8 @@ import basePage.BasePage;
 
 public abstract class HomePageObjRepo extends BasePage {
 	
+	
+
 	@FindBy(name = "access_code")
 	protected WebElement accessCode;
 	
@@ -42,6 +44,7 @@ public abstract class HomePageObjRepo extends BasePage {
 	
 	@FindBy(id = "facebook-login-link")
 	protected WebElement faceBookIcon;
+	
 
 	@FindBy(id = "identifierId")
 	protected WebElement emailId;
@@ -49,7 +52,7 @@ public abstract class HomePageObjRepo extends BasePage {
 	@FindBy(id = "identifierNext")
 	protected WebElement nextButton;
 	
-	@FindBy(xpath = "//div[@class='carousel_inner_wrpr']")
+	@FindBy(xpath = "//a[@class='carousel_banner  ']")
 	protected WebElement banners;
 	
 	@FindBy(xpath = "//div[@class='carousel_cta']")
@@ -67,20 +70,15 @@ public abstract class HomePageObjRepo extends BasePage {
 	@FindBy(xpath = "//div[@class='carousel_banner_prev_btn']")
 	protected WebElement backButton;
 	
-	@FindBy(xpath = "//div[@class='swiper-button-next top_selling_swiper_next']")
+	@FindBy(xpath = "//*[@class='swiper-button-next top_selling_swiper_next']")
 	protected WebElement topForButton;
 	
-	@FindBy(xpath = "//div[@class='swiper-button-prev top_selling_swiper_prev']")
+	@FindBy(xpath = "//*[@class='swiper-button-prev top_selling_swiper_prev swiper-button-disabled']")
 	protected WebElement topBackButton;
 	
 	@FindBy(xpath = "//div[@class='products_img']")
 	protected WebElement topProduct;
-	
-	@FindBy(xpath = "//div[@class='swiper-button-next testimonial_swiper_next']")
-	protected WebElement happyFor;
-	
-	@FindBy(xpath = "//div[@class='swiper-button-prev testimonial_swiper_prev']")
-	protected WebElement happyBack;
+
 	
 	@FindBy(xpath = "//div[@class='flat__sidebar__icon']")
 	protected WebElement feedBack;
@@ -136,13 +134,13 @@ public abstract class HomePageObjRepo extends BasePage {
 	@FindBy(xpath = "//div[@class='bottom_icons_box']")
 	protected WebElement backToTOP;
 	
-	@FindBy(xpath = "//div[@class='whatsapp_icons ']")
+	@FindBy(id = "whatsappIcon")
 	protected WebElement whatsApp;
 	
-	@FindBy(xpath = "//div[@class='swiper_next__btn']")
+	@FindBy(xpath = "//*[@class='swiper-button-next new_arrival_swiper_next']")
 	protected WebElement featureOnForward;
 	
-	@FindBy(xpath = "//div[@class='swiper_prev__btn']")
+	@FindBy(xpath = "//*[@class='swiper-button-prev new_arrival_swiper_prev swiper-button-disabled']")
 	protected WebElement featureOnBack;
 	
 	@FindBy(xpath = "//a[@class='testimonial_cards_quick_view']")
@@ -153,9 +151,6 @@ public abstract class HomePageObjRepo extends BasePage {
 	
 	@FindBy(xpath = "//div[@class='outfit_cards_list swiper-wrapper']")
 	protected WebElement partySection;
-	
-	
-	
 	
 	
 	

@@ -206,21 +206,19 @@ public abstract class AddressPageObjRepo extends BasePage {
    @FindBy(xpath = "//div[@class='nav_drop_down_box_category active']//a[contains(translate(text(), 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 'ALL')]")
 	protected WebElement category;
    
-   @FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']")
+   @FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2 Cls_CartList ClsProductListSizes']")
 	protected WebElement addToCart;
    
-//   @FindBy(xpath ="//button[@class='Cls_cart_btn']")
-//	protected WebElement bagIcon;
-   @FindBy(xpath = "//button[@class='Cls_cart_btn Cls_redirect_restrict']")
+
+   @FindBy(xpath = "	//a[@class='Cls_cart_btn Cls_redirect_restrict']")
    protected WebElement bagIcon;
    
-   @FindBy(xpath ="//button[.='Buy Now']")
-	protected WebElement buyNowButton;
+   @FindBy(xpath ="//a[@class='empty_cart_continue_btn btn___2']")
+	protected WebElement continueButton;
    
    @FindBy(xpath = "//button[@class='place_order_btn Cls_place_order btn___2 ']")
    protected WebElement checkoutpageContinueButton;
 	
 	@FindBy(xpath = "//div[@class='address_card Cls_addr_data_section']")
 	protected WebElement totalAddressCount;
-
 }

@@ -59,9 +59,9 @@ Feature: This is HomePage feature
       | TD_UI_Zlaata_Home_05 |
       
        @TC_UI_Zlaata_Home_06
-  Scenario Outline: TC_UI_Zlaata_Home_06 |Verify if the user is able to click on the "Show More" button in the "New Arrival" section.|"<TD_ID>"
+  Scenario Outline: TC_UI_Zlaata_Home_06 |Verify if the user is able to click on the "New Arrival" section forward and backward arrows.|"<TD_ID>"
      
-     Given User clicks on show more button at new arrivals
+     Given User clicks on forward and backward arrows on  new arrivals
     
 
     Examples: 
@@ -98,71 +98,44 @@ Feature: This is HomePage feature
       | TD_ID                  |
       | TD_UI_Zlaata_Home_09 |
       
-       @TC_UI_Zlaata_Home_10
-  Scenario Outline: TC_UI_Zlaata_Home_10 |Verify if the user is able to click on the forward and backward arrows in the "Happy Customer" section.|"<TD_ID>"
-     
-     Given User verify happy customer section
-    
 
-    Examples: 
-      | TD_ID                  |
-      | TD_UI_Zlaata_Home_10 |
-      
-       @TC_UI_Zlaata_Home_11
-  Scenario Outline: TC_UI_Zlaata_Home_11 |Verify if the user is able to click on the "Quick View" button in the "Happy Customer" section.|"<TD_ID>"
-     
-     Given User clicks on qucik view of happy customer
-    
 
-    Examples: 
-      | TD_ID                  |
-      | TD_UI_Zlaata_Home_11 |
-    
-     @TC_UI_Zlaata_Home_12
-  Scenario Outline: TC_UI_Zlaata_Home_12 |Verify if the user is able to give a feedback successfully|"<TD_ID>"
+     @TC_UI_Zlaata_Home_10
+  Scenario Outline: TC_UI_Zlaata_Home_10 |Verify if the user is able to give a feedback successfully|"<TD_ID>"
      
      Given User submitting feedback
     
 
     Examples: 
       | TD_ID                  |
-      | TD_UI_Zlaata_Home_12 |
+      | TD_UI_Zlaata_Home_10 |
+ 
       
-       @TC_UI_Zlaata_Home_13
-  Scenario Outline: TC_UI_Zlaata_Home_13 |Verify if the user is able to click the "Back to Top" arrow on all pages.|"<TD_ID>"
-     
-     Given User clicks on back to top button
-    
-
-    Examples: 
-      | TD_ID                  |
-      | TD_UI_Zlaata_Home_13 |
-      
-       @TC_UI_Zlaata_Home_14
-  Scenario Outline: TC_UI_Zlaata_Home_14 |Verify if the user is able to click on the WhatsApp icon on all pages.|"<TD_ID>"
+       @TC_UI_Zlaata_Home_11
+  Scenario Outline: TC_UI_Zlaata_Home_11 |Verify if the user is able to click on the WhatsApp icon on all pages.|"<TD_ID>"
      
      Given User clicks on whats app icon
     
 
     Examples: 
       | TD_ID                  |
-      | TD_UI_Zlaata_Home_14 |
+      | TD_UI_Zlaata_Home_11 |
       
-       @TC_UI_Zlaata_Home_15
-  Scenario Outline: TC_UI_Zlaata_Home_15 |Verify if the user is able to click on the forward and backward arrows in the "Feature On" section.|"<TD_ID>"
+       @TC_UI_Zlaata_Home_12
+  Scenario Outline: TC_UI_Zlaata_Home_12 |Verify if the user is able to click on the forward and backward arrows in the "Feature On" section.|"<TD_ID>"
      
      Given User veridying feature on section
 
     Examples: 
       | TD_ID                  |
-      | TD_UI_Zlaata_Home_15 |
+      | TD_UI_Zlaata_Home_12 |
       
-       @TC_UI_Zlaata_Home_16
-  Scenario Outline: TC_UI_Zlaata_Home_16 |Verify if the all home page fields are avilable once page load|"<TD_ID>"
+       @TC_UI_Zlaata_Home_13
+  Scenario Outline: TC_UI_Zlaata_Home_13 |Verify if the all home page fields are avilable once page load|"<TD_ID>"
      
      Given User verifying all the available headings in home page
     
 
     Examples: 
       | TD_ID                  |
-      | TD_UI_Zlaata_Home_16 |
+      | TD_UI_Zlaata_Home_13 |

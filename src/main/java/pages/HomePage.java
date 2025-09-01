@@ -23,7 +23,6 @@ import utils.Common;
 public final class HomePage extends HomePageObjRepo {
 
 
-
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 		PageFactory.initElements(this.driver, this);
@@ -33,7 +32,7 @@ public final class HomePage extends HomePageObjRepo {
 		driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
 				type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
 				click(submit);
-//		popup();
+		//popup();
 
 
 	}
@@ -79,8 +78,8 @@ public final class HomePage extends HomePageObjRepo {
 		homeLaunch();
 		try {
 			Actions action = new Actions(driver);
-			WebElement bannerNxtBtn = driver.findElement(By.xpath("//div[@class='carousel_banner_next_btn']"));
-			WebElement bannerPrevBtn = driver.findElement(By.xpath("//div[@class='carousel_banner_prev_btn']"));
+			WebElement bannerNxtBtn = driver.findElement(By.xpath("//*[@class='carousel_banner_prev_btn']"));
+			WebElement bannerPrevBtn = driver.findElement(By.xpath("//*[@class='carousel_banner_next_btn']"));
 
 			int maxClicks = 5; // Define the maximum number of clicks
 
@@ -149,13 +148,13 @@ public final class HomePage extends HomePageObjRepo {
 			Common.waitForElement(2);
 			// Now wait for and click the forward button
 			WebElement forwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-					By.xpath("//div[@class='swiper-button-next top_selling_swiper_next']")));
+					By.xpath("//*[@class='swiper-button-next top_selling_swiper_next']")));
 			action.moveToElement(forwardButton).click().perform();
 			System.out.println("Top Selling forward button clicked.");
 
 			// Now wait for and click the backward button
 			WebElement backwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-					By.xpath("//div[@class='swiper-button-prev top_selling_swiper_prev']")));
+					By.xpath("//*[@class='swiper-button-prev top_selling_swiper_prev']")));
 			action.moveToElement(backwardButton).click().perform();
 			System.out.println("Top Selling backward button clicked.");
 
@@ -206,30 +205,66 @@ public final class HomePage extends HomePageObjRepo {
 	}
 
 
-	public void showMore() {
-		homeLaunch();
-		Actions action = new Actions(driver);
-		Common.waitForElement(2);
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2300);");
-		Common.waitForElement(2);
-		action.moveToElement(showMore).click().build().perform();
-		WebElement showMorePage = driver.findElement(By.xpath("//h3[@class='prod_list_topic']"));
-		if (showMorePage.isDisplayed()) {
-			String pageHeading = showMorePage.getText();
-			System.out.println("Show More button Redirected sucessfull: " +pageHeading);
-			Assert.assertTrue(verifyDisplayed(showMorePage));
+//	public void showMore() {
+//		homeLaunch();
+//		Actions action = new Actions(driver);
+//		Common.waitForElement(2);
+//		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2300);");
+//		Common.waitForElement(2);
+//		action.moveToElement(showMore).click().build().perform();
+//		WebElement showMorePage = driver.findElement(By.xpath("//h3[@class='prod_list_topic']"));
+//		if (showMorePage.isDisplayed()) {
+//			String pageHeading = showMorePage.getText();
+//			System.out.println("Show More button Redirected sucessfull: " +pageHeading);
+//			Assert.assertTrue(verifyDisplayed(showMorePage));
+//
+//
+//		}
+//
+//	}
+	
+	public void newArrivalArrows() {
+	    homeLaunch(); // Open home page
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
+	    // Locators
+	    By heading = By.xpath("//h2[text()='New Arrivals']");
+	    By forwardBtn = By.xpath("//h2[text()='New Arrivals']/following::div[contains(@class,'swiper-button-next')][1]");
+	    By backwardBtn = By.xpath("//h2[text()='New Arrivals']/following::div[contains(@class,'swiper-button-prev')][1]");
 
-		}
+	    try {
+	        // Scroll the New Arrivals heading to the middle of the viewport
+	        WebElement headingElement = wait.until(ExpectedConditions.visibilityOfElementLocated(heading));
+	        ((JavascriptExecutor) driver).executeScript(
+	                "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});", headingElement);
+	        Common.waitForElement(2); // Small wait for lazy-loaded content
 
+	        // Click the forward arrow
+	        WebElement forwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(forwardBtn));
+	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", forwardButton);
+	        System.out.println("✅ New Arrival forward button clicked.");
+	        Common.waitForElement(2);
+
+	        // Click the backward arrow
+	        WebElement backwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(backwardBtn));
+	        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", backwardButton);
+	        System.out.println("✅ New Arrival backward button clicked.");
+	        Common.waitForElement(2);
+
+	    } catch (Exception e) {
+	        System.out.println("❌ Caught an exception: " + e.getMessage());
+	        NoSuchElementException e1 = new NoSuchElementException("A NoSuchElementException occurred in New Arrivals arrows");
+	        e1.initCause(e);
+	        throw e1;
+	    }
 	}
 
 	public void newArivalProductImg() {
 		homeLaunch();
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2300);");
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2700);");
 		try {
 
-			List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='new_arrival_card_list']"));
+			List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='new_arrival_card_list ']")); 
 			if (clickRandomProduct.isEmpty()) {
 				System.out.println("No products found in New arrivals section.");
 				return;
@@ -264,7 +299,7 @@ public final class HomePage extends HomePageObjRepo {
 
 	public void quickView() {
 		homeLaunch();
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2300);");
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2500);");
 		try {
 
 			List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='products_quick_view_box Cls_quickview_btn']"));
@@ -280,7 +315,7 @@ public final class HomePage extends HomePageObjRepo {
 			Actions actions = new Actions(driver);
 			actions.moveToElement(randomProduct).click().build().perform();
 
-			Common.waitForElement(2);
+			Common.waitForElement(3);
 			WebElement quickViewPrdContent = driver.findElement(By.xpath("//div[@class='qv_prod_details_cont']"));
 			String quickViewContent = quickViewPrdContent.getText().trim();
 			System.out.println("Quick view product content: " + quickViewContent);
@@ -300,9 +335,11 @@ public final class HomePage extends HomePageObjRepo {
 
 	public void inspiredBy() {	
 		homeLaunch();
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2500);");
+		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 2600);");
 		List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//div[@class='inspired_slide_img']"));
 		Collections.shuffle(clickRandomProduct);
+		Common.waitForElement(15);
+
 
 		if (!clickRandomProduct.isEmpty()) {
 			WebElement randomProduct = clickRandomProduct.get(0);
@@ -318,70 +355,70 @@ public final class HomePage extends HomePageObjRepo {
 		}
 	}
 
-	public void happy() {
-
-		homeLaunch();
-		Actions action = new Actions(driver);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-
-		try {
-			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 6200);");
-			Common.waitForElement(2);
-			// Now wait for and click the forward button
-			WebElement forwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-					By.xpath("//div[@class='swiper-button-next testimonial_swiper_next']")));
-			action.moveToElement(forwardButton).click().perform();
-			System.out.println("Happy customer forward button clicked.");
-
-			// Now wait for and click the backward button
-			WebElement backwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-					By.xpath("//div[@class='swiper-button-prev testimonial_swiper_prev']")));
-			action.moveToElement(backwardButton).click().perform();
-			System.out.println("Happy customer backward button clicked.");
-
-		} catch (Exception e) {
-			System.out.println("Caught an exception: " + e.getMessage());
-			NoSuchElementException e1 = new NoSuchElementException("A NoSuchElementException exception occurred");
-			e1.initCause(e);
-			throw e1;
-		}
-	}
-
-	public void happyQuickView() {
-		homeLaunch();
-		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 6200);");
-		try {
-
-			List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//a[@class='testimonial_cards_quick_view']"));
-			if (clickRandomProduct.isEmpty()) {
-				System.out.println("No Quick view found in Happy customer section.");
-				return;
-			}
-
-			String customerContent = driver.findElement(By.xpath(".//p[@class='testimonial_cards_disc']")).getText().trim().toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "");
-			System.out.println("Customer Content: " + customerContent);
-			WebElement randomProduct = clickRandomProduct.get(0);
-			Collections.shuffle(clickRandomProduct);
-			Actions actions = new Actions(driver);
-			actions.moveToElement(randomProduct).click().build().perform();
-
-			Common.waitForElement(2);
-			WebElement reviewContent = driver.findElement(By.xpath("//div[@class='customer_review_card']//p"));
-			String reviewDeatilsContent = reviewContent.getText().trim().toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "");
-			System.out.println("Review details content: " + reviewDeatilsContent);
-
-			// Check if productDetailContent contains productName (partial match)
-			if (reviewDeatilsContent.contains(customerContent)) {
-				System.out.println("Both Contents are matching.");
-			} else {
-				System.out.println("Both Contents are not matching.");
-			}
-
-		} catch (Exception e) {
-			System.out.println("Exception in Happy customer section: " + e.getMessage());
-			throw e;
-		}
-	}
+//	public void happy() {
+//
+//		homeLaunch();
+//		Actions action = new Actions(driver);
+//		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+//
+//		try {
+//			((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 6200);");
+//			Common.waitForElement(2);
+//			// Now wait for and click the forward button
+//			WebElement forwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+//					By.xpath("//div[@class='swiper-button-next testimonial_swiper_next']")));
+//			action.moveToElement(forwardButton).click().perform();
+//			System.out.println("Happy customer forward button clicked.");
+//
+//			// Now wait for and click the backward button
+//			WebElement backwardButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
+//					By.xpath("//div[@class='swiper-button-prev testimonial_swiper_prev']")));
+//			action.moveToElement(backwardButton).click().perform();
+//			System.out.println("Happy customer backward button clicked.");
+//
+//		} catch (Exception e) {
+//			System.out.println("Caught an exception: " + e.getMessage());
+//			NoSuchElementException e1 = new NoSuchElementException("A NoSuchElementException exception occurred");
+//			e1.initCause(e);
+//			throw e1;
+//		}
+//	}
+//
+//	public void happyQuickView() {
+//		homeLaunch();
+//		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 6200);");
+//		try {
+//
+//			List<WebElement> clickRandomProduct = driver.findElements(By.xpath("//a[@class='testimonial_cards_quick_view']"));
+//			if (clickRandomProduct.isEmpty()) {
+//				System.out.println("No Quick view found in Happy customer section.");
+//				return;
+//			}
+//
+//			String customerContent = driver.findElement(By.xpath(".//p[@class='testimonial_cards_disc']")).getText().trim().toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "");
+//			System.out.println("Customer Content: " + customerContent);
+//			WebElement randomProduct = clickRandomProduct.get(0);
+//			Collections.shuffle(clickRandomProduct);
+//			Actions actions = new Actions(driver);
+//			actions.moveToElement(randomProduct).click().build().perform();
+//
+//			Common.waitForElement(2);
+//			WebElement reviewContent = driver.findElement(By.xpath("//div[@class='customer_review_card']//p"));
+//			String reviewDeatilsContent = reviewContent.getText().trim().toLowerCase().replaceAll("[^a-zA-Z0-9\\s]", "");
+//			System.out.println("Review details content: " + reviewDeatilsContent);
+//
+//			// Check if productDetailContent contains productName (partial match)
+//			if (reviewDeatilsContent.contains(customerContent)) {
+//				System.out.println("Both Contents are matching.");
+//			} else {
+//				System.out.println("Both Contents are not matching.");
+//			}
+//
+//		} catch (Exception e) {
+//			System.out.println("Exception in Happy customer section: " + e.getMessage());
+//			throw e;
+//		}
+//	}
 
 	public void feedBack() {
 		Actions action = new Actions(driver);
@@ -441,7 +478,7 @@ public final class HomePage extends HomePageObjRepo {
 		homeLaunch();
 		((JavascriptExecutor) driver).executeScript("window.scrollBy(0, 6200);");
 		Common.waitForElement(1);
-		WebElement whatsApp = driver.findElement(By.xpath("//div[@class='whatsapp_icons ']"));
+		WebElement whatsApp = driver.findElement(By.id("whatsappIcon"));
 		try {
 			if (whatsApp.isDisplayed()) {
 				click(whatsApp);
@@ -529,12 +566,12 @@ public final class HomePage extends HomePageObjRepo {
 					System.out.println("Neither of the expected pages were found.");
 				}
 
-				WebElement featureOnNxtBtn = driver.findElement(By.xpath("//div[@class='swiper_next__btn']"));
+				WebElement featureOnNxtBtn = driver.findElement(By.xpath("//*[@class='swiper-button-next featured_next_btn']"));
 				if (featureOnNxtBtn.isDisplayed()) {
 					clickUsingJavaScript(featureOnNxtBtn);
-					System.out.println("Feature on Next Button clicked");
+					System.out.println("Feature on Next Button clicked");	
 				}
-				WebElement featureOnBackBtn = driver.findElement(By.xpath("//div[@class='swiper_prev__btn']"));
+				WebElement featureOnBackBtn = driver.findElement(By.xpath("//*[@class='swiper-button-prev featured_prev_btn']"));
 				if (featureOnBackBtn.isDisplayed()) {
 					clickUsingJavaScript(featureOnBackBtn);
 					System.out.println("Feature on Back Button clicked");
@@ -671,3 +708,5 @@ public final class HomePage extends HomePageObjRepo {
 
 
 }
+
+

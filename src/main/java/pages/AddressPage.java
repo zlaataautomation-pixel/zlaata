@@ -5,6 +5,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -29,12 +30,21 @@ public  final class AddressPage  extends AddressPageObjRepo
 		click(bagIcon);
 	try {
 		if (!products.isEmpty()) {
-			click(buyNowButton);
+//			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkoutpageContinueButton);
+//
+//			// Optionally wait for visibility before clicking
+//			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//			wait.until(ExpectedConditions.elementToBeClickable(checkoutpageContinueButton));
+//
+//			// Click the button
+//			checkoutpageContinueButton.click();
+			((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", checkoutpageContinueButton);
+
+			((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkoutpageContinueButton);
 		}
 		
 		else {
-			Common.waitForElement(1);
-			click(closeBag);
+		
 			Common.waitForElement(1);
 			Actions actions = new Actions(driver);
 			actions.moveToElement(shopMenu);
@@ -49,7 +59,11 @@ public  final class AddressPage  extends AddressPageObjRepo
 				click(addToCart);
 				Common.waitForElement(5);
 				click(bagIcon);
-				click(buyNowButton);
+				Common.waitForElement(5);
+
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", checkoutpageContinueButton);
+
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkoutpageContinueButton);				
 			}
 			
 		}
@@ -301,8 +315,12 @@ public  final class AddressPage  extends AddressPageObjRepo
 			//F:4
 			public void addNewAddressOnCheckoutPage() {
 				
-			    click(checkoutpageContinueButton);
-			    boolean isNewAddressAdded = false;
+				
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", checkoutpageContinueButton);
+
+				((JavascriptExecutor) driver).executeScript("arguments[0].click();", checkoutpageContinueButton);
+
+				boolean isNewAddressAdded = false;
 
 			    try {
 			        if (checkoutPageAddres.isDisplayed()) {

@@ -13,7 +13,7 @@ public class BagpageStepDef {
 
 	TestContext testContext;
 	BagPage bag;
-
+	
 	public BagpageStepDef(TestContext context) {
 		testContext = context;
 		bag = testContext.getPageObjectManager().getBagPage();
@@ -136,13 +136,6 @@ public class BagpageStepDef {
 	public void user_verifies_button_functionality(String string) {
 		bag.buyNowBagPage();
 	}
-
-
-
-
-
-
-
 
 
 

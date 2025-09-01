@@ -18,6 +18,7 @@ public class NegativeStepDef {
 	
 	@Given("User Signup with all valid data")
 	public void user_signup_with_all_valid_data() throws TimeoutException {
+
 		negsignup.signUp();
 	}
 

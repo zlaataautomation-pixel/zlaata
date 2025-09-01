@@ -1,3 +1,4 @@
+
 package objectRepo;
 
 
@@ -23,7 +24,7 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 
 
 	@FindBy(xpath =" //div[@class='prod_current_price']")
-	protected WebElement currentPrice;
+	protected WebElement normalPricePDP;
 
 	@FindBy(xpath =" //span[@class='product_list_cards_actual_price_txt']")
 	protected List <WebElement> promotionalPriceElement;
@@ -50,7 +51,7 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	@FindBy(xpath = "//h4[@class='prod_name']")
 	protected WebElement productName;
 
-	@FindBy(xpath = "//div[@class='prod_main_details']//div[@class='prod_wishlist_btn Cls_prod_wishlist_btn ']")
+	@FindBy(xpath = "//div[@class='prod_main_details']//div[@class='prod_wishlist_btn Cls_prod_wishlist_btn']")
 	protected WebElement wishlistBtn;
 
 	@FindBy(xpath = "//h2[@class='product_list_cards_heading']")
@@ -136,9 +137,10 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	@FindBy(xpath = "//ul[@class='filter_manu_sort_by_filter_list Cls_SortBy Cls_ProductListSortBy Cls_desktop_sort']//li[@value='Discount Low to High']")
 	protected WebElement sortByDiscountLowtoHigh;
 	
-	
 	@FindBy(xpath = "//li[@data-value='Price High to Low']")
 	protected WebElement sortByPriceHightoLow;
+	
+
 	
 	@FindBy(xpath = "//li[@data-value='Price Low to High']")
 	protected WebElement sortByPriceLowtoHigh;
@@ -246,6 +248,23 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 	@FindBy(xpath = "//button[@class='add_bag_prod_buy_now_btn btn___2  Cls_CartList ClsProductListSizes']")
 	protected WebElement addToCart;
 
+   @FindBy(xpath = "//div[@class='zl-prod-color-swatches']")
+   protected List<WebElement> colorDot;
+   
+   @FindBy(xpath = "//h5[@class='prod_category']")
+   protected WebElement detailsPageCategoryName;
+   
+   @FindBy(xpath = "//div[@class='try_along_quickview_btn Cls_quickview_btn']")
+   protected List<WebElement> tryAlongProducts;
+   
+   @FindBy(xpath = "//div[@class='prod_color_list Cls_prod_color_list active']")
+   protected List<WebElement> intiallyOpencolor; // For multiple colors
 
+   @FindBy(xpath = "//div[@class='prod_color_list Cls_prod_color_list ']")
+   protected WebElement activityColor; // For a single color
 
+   
+   @FindBy(xpath = "//div[@class='prod_color_options Cls_prod_color_options']")
+   protected  List<WebElement> allColorList;
+   
 }
