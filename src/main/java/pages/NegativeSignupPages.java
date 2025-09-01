@@ -114,7 +114,9 @@ private WebDriver driver;
 	
 	public void signUp() throws TimeoutException {
 	    driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-	    
+	    type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+        click(submit);
+        Common.waitForElement(2);
 	    click(profile);
 	    click(signupButton);
 

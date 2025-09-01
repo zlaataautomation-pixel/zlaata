@@ -12,11 +12,11 @@ import java.util.logging.Logger;
 
 @RunWith(Cucumber.class)
 @CucumberOptions( plugin = {"com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:","rerun:target/rerun.txt"},
-features = {"src/test/resources/features/CouponModule"},
+features = {"src/test/resources/features"},
 glue = "stepDef",	
 monochrome = true,	
-dryRun = false
-//tags="@TC_UI_Zlaata_CP_16"
+dryRun = false,
+tags="@TC_UI_Zlaata_ADDP_01"
 )
 
 		

@@ -25,8 +25,8 @@ public final class LoginPage extends LoginObjRepository {
 
     public void userLogin() {
         driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-//        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-//        click(submit);
+        type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+        click(submit);
 //        popup();
         Common.waitForElement(1);
         click(profile);
