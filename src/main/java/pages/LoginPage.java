@@ -7,7 +7,11 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+
+import com.ibm.disthub2.impl.matching.DisthubValueAccessor.Action;
+
 import manager.FileReaderManager;
 import objectRepo.LoginObjRepository;
 import utils.Common;
@@ -24,16 +28,15 @@ public final class LoginPage extends LoginObjRepository {
     
     public void homeLaunch() {
 		driver.get(FileReaderManager.getInstance().getConfigReader().getApplicationUrl());
-				type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
-				click(submit);
+//				type(accessCode, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Access"));
+//				click(submit);
     }
 
     public void userLogin() {
     	
     	homeLaunch();    
     	Common.waitForElement(1);
-        click(profile);
-        Common.waitForElement(1);
+    	click(profile);
         type(loginNumber, FileReaderManager.getInstance().getJsonReader().getValueFromJson("Number"));
         Common.waitForElement(1);
         click(sendotp);

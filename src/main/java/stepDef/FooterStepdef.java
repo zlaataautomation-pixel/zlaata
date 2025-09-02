@@ -1,7 +1,6 @@
 package stepDef;
 import context.TestContext;
 import io.cucumber.java.en.Given;
-import pages.BagPage;
 import pages.FooterPage;
 import pages.HomePage;
 

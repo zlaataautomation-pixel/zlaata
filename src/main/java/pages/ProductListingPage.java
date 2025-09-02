@@ -433,7 +433,7 @@ public final class ProductListingPage extends ProductListObjRepo {
 		if (!addProduct.isEmpty()) {
 			WebElement randomProduct = addProduct.get(0);
 			actions.moveToElement(randomProduct).click().build().perform();
-			Common.waitForElement(2);
+			Common.waitForElement(5);
 			click(addToCart);
 			
 			

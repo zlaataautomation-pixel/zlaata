@@ -18,7 +18,6 @@ public class PageObjectManager {
     private HomePage home;
     private Menus menu;
     private ProductListingPage pLp;
-    private BagPage bag;
     private CheckoutPage cOp;
     private SaleOffer50Percentage sale;
     private SaleBuy1Get1 saleB1G1;
@@ -81,10 +80,7 @@ public class PageObjectManager {
         return (pLp == null) ? pLp = new ProductListingPage(driver) : pLp;
     
 	}
-	public BagPage getBagPage() {
-        return (bag == null) ? bag = new BagPage(driver) : bag;
-    
-	}
+	
 	public CheckoutPage getCheckoutPage() {
         return (cOp == null) ? cOp = new CheckoutPage(driver) : cOp;
     
