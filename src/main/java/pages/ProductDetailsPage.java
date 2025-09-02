@@ -920,27 +920,62 @@ public final class ProductDetailsPage extends ProductDetailsPageObjRepo {
 	//	    }
 	//	}
 
-	public void tryAlongQuickViewClose() {
-		RandomProduct();
-		Common.waitForElement(1);
-		scrollUsingJSWindow();
-		Common.waitForElement(2);
-		Collections.shuffle(clickOnQuickViewButton);
-		try {
-			if (!clickOnQuickViewButton.isEmpty()) {
-				WebElement randomIcon = clickOnQuickViewButton.get(0);
-				click(randomIcon);
-				Common.waitForElement(2);
-				click(closeTheQuickViewPopup);
-				System.out.println("Quick view close button clicked");
-			}
-			else {
-				System.out.println("Quick view close button not clickable");
-			}
-		} catch (Exception e) {
-			System.out.println("Caught an exception: " + e.getMessage());
-		}
-	}
+//	public void tryAlongQuickViewClose() {
+//		RandomProduct();
+//		Common.waitForElement(1);
+//		scrollUsingJSWindow();
+//		Common.waitForElement(2);
+//		Collections.shuffle(clickOnQuickViewButton);
+//		try {
+//			if (!clickOnQuickViewButton.isEmpty()) {
+//				WebElement randomIcon = clickOnQuickViewButton.get(0);
+//				click(randomIcon);
+//				Common.waitForElement(2);
+//				click(closeTheQuickViewPopup);
+//				System.out.println("Quick view close button clicked");
+//			}
+//			else {
+//				System.out.println("Quick view close button not clickable");
+//			}
+//		} catch (Exception e) {
+//			System.out.println("Caught an exception: " + e.getMessage());
+//		}
+//	}
+	
+ 	public void viewMoreButton() {
+ 	// Select a random product
+ 		RandomProduct();
+ 		Common.waitForElement(1);
+
+ 		// -------------------- MORE FOR YOU --------------------
+ 		// Scroll to More For You button and click
+ 		((JavascriptExecutor) driver).executeScript(
+ 		    "arguments[0].scrollIntoView(true); window.scrollBy(0, -100);", 
+ 		    moreForYouSectionViewAllButton
+ 		);
+ 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", moreForYouSectionViewAllButton);
+
+ 		// Get and print heading
+ 		String headingText = heading.getText();
+ 		System.out.println("📌 Heading displayed in application (More For You): " + headingText);
+
+ 		// -------------------- NAVIGATE BACK --------------------
+ 		driver.navigate().back(); // Go back to previous page
+ 		Common.waitForElement(1); // Wait for page to load
+
+ 		// -------------------- SUGGESTED FOR YOU --------------------
+ 		// Scroll to Suggested For You button and click
+ 		((JavascriptExecutor) driver).executeScript(
+ 		    "arguments[0].scrollIntoView(true); window.scrollBy(0, -100);", 
+ 		    suggestedForYouSectionViewAllButton
+ 		);
+ 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", suggestedForYouSectionViewAllButton);
+
+ 		// Get and print heading
+ 		String headingText1 = heading.getText();
+ 		System.out.println("📌 Heading displayed in application (Suggested For You): " + headingText1);
+ 	}
+	
 	public void productDescriptionDropDDown() {
 		RandomProduct();
 		Common.waitForElement(1);

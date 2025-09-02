@@ -87,11 +87,11 @@ public class ProductDetailsStepDef {
 
 	@Given("User verifies that the category name is displayed on the Product Details Page")
 	public void user_verifies_that_the_category_name_is_displayed_on_the_product_details_page() {
-		
+
 		home.homeLaunch();
 		pDP.categoryName();
-		
-		
+
+
 	}
 
 
@@ -136,11 +136,14 @@ public class ProductDetailsStepDef {
 	}
 
 
-	@Given("User Verifies Quick View Popup Close Button on Product details page #excel need to update")
-	public void user_verifies_quick_view_popup_close_button_on_product_details_page_excel_need_to_update() {
+
+	@Given("User on Product details page")
+	public void user_on_product_details_page() {
 		home.homeLaunch();
-		pDP.tryAlongQuickViewClose();
+		pDP.viewMoreButton();
 	}
+
+
 
 	@Given("User Verifies Dropdown Arrows for Sections \\(Product Description, Composition & Care, etc.)")
 	public void user_verifies_dropdown_arrows_for_sections_product_description_composition_care_etc() {

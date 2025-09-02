@@ -262,9 +262,22 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
 
    @FindBy(xpath = "//div[@class='prod_color_list Cls_prod_color_list ']")
    protected WebElement activityColor; // For a single color
+   
+   
+   @FindBy(xpath = "//h3[@class='prod_list_topic']")
+   protected WebElement heading;
 
    
    @FindBy(xpath = "//div[@class='prod_color_options Cls_prod_color_options']")
    protected  List<WebElement> allColorList;
+   
+   @FindBy(xpath = "//div[@class='more_for_you_section common_card_section Cls_more_for_you_section']//a[@class='common_section_view_all_btn']")
+   protected    WebElement moreForYouSectionViewAllButton;
+   
+   @FindBy(xpath = "//div[@class='suggested_for_you_section common_card_section Cls_suggested_for_you_section']//a[@class='common_section_view_all_btn']")
+   protected WebElement suggestedForYouSectionViewAllButton;
+   
+   @FindBy(xpath = "//div[@class='more_for_you_section common_card_section Cls_more_for_you_section']//div[@class='common_section_header']")
+   protected    WebElement moreForYouSectionText;
    
 }

@@ -122,8 +122,8 @@ Scenario Outline: TC_UI_Zlaata_PDP_16 | Verify Eye Icon Click on "Try Along" Pro
     | TD_UI_Zlaata_PDP_16   |
 
 @TC_UI_Zlaata_PDP_17
-Scenario Outline: TC_UI_Zlaata_PDP_17 | Verify Quick View Popup Close Button on Product details page | "<TD_ID>"
-  Given User Verifies Quick View Popup Close Button on Product details page #excel need to update
+Scenario Outline: TC_UI_Zlaata_PDP_17 |Verify View All Button in More for You and Suggested for You Sections| "<TD_ID>"
+  Given User on Product details page
   Examples:
     | TD_ID                  |
     | TD_UI_Zlaata_PDP_17   |
@@ -192,5 +192,12 @@ Scenario Outline: TC_UI_Zlaata_PDP_26 | Verify that on Review Popup without Ente
     | TD_ID                  |
     | TD_UI_Zlaata_PDP_26   |
     
-    
+ @TC_UI_Zlaata_PDP_27
+Scenario Outline: TC_UI_Zlaata_PDP_27 | Verify that user can submit a review after entering all data | "<TD_ID>"
+  Given User on Product details page and gives a review
+
+Examples:
+  | TD_ID                |
+  | TD_UI_Zlaata_PDP_27 |
+ 
     
