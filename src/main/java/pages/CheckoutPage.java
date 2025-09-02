@@ -176,25 +176,48 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 		return 0;
 	}
 
-	private double applyCouponIfNotApplied() {
-		if (!couponApplied) {
-			try {
-				if (driver.findElements(By.xpath("//button[@class='checkout_details_sub_heading viewCouponBtn']")).size() > 0) {
-					driver.findElement(By.xpath("//button[@class='checkout_details_sub_heading viewCouponBtn']")).click();
-					Common.waitForElement(2);
-					List<WebElement> coupons = driver.findElements(By.xpath("//button[@class='coupon_apply_btn Cls_apply_coupon']"));
-					if (!coupons.isEmpty()) {
-						coupons.get(0).click();
-						Common.waitForElement(2);
-						driver.findElement(By.xpath("//div[@class='coupon_popup popup_containers active']//button[@class='coupon_input_apply_btn']")).click();
-						Common.waitForElement(2);
-						couponDiscount = safeParseDouble(safeGetTextDriver("//p[@class='acc_details_status']"));
-						couponApplied = true;
-					}
-				}
-			} catch (Exception ignored) {}
-		}
-		return couponDiscount;
+	// Apply a coupon only once if none is applied
+	private void applyCouponIfNotApplied() {
+	    if (couponApplied) return;
+	    try {
+	        // if a coupon chip / status already shows savings, consider it applied
+	        String already = safeGetTextDriver("//p[contains(@class,'acc_details_status')]");
+	        if (already != null && already.matches(".*\\d+.*")) {
+	            couponApplied = true;
+	            return;
+	        }
+
+	        if (driver.findElements(By.xpath("//button[contains(@class,'viewCouponBtn')]")).size() > 0) {
+	            driver.findElement(By.xpath("//button[contains(@class,'viewCouponBtn')]")).click();
+	            Common.waitForElement(1);
+	            List<WebElement> coupons = driver.findElements(By.xpath("//button[contains(@class,'Cls_apply_coupon')]"));
+	            if (!coupons.isEmpty()) {
+	                coupons.get(0).click();
+	                Common.waitForElement(1);
+	                driver.findElement(By.xpath("//div[contains(@class,'coupon_popup') and contains(@class,'active')]//button[contains(@class,'coupon_input_apply_btn')]")).click();
+	                Common.waitForElement(2);
+	            }
+	            couponApplied = true;
+	        }
+	    } catch (Exception ignored) {}
+	}
+
+	/** Always read the CURRENT coupon discount from the Price Details pane. */
+	private double getCurrentCouponDiscount() {
+	    String[] xps = new String[] {
+	        // ✅ Primary: the row with class Cls_cart_coupon_discount
+	        "//div[contains(@class,'Cls_cart_coupon_discount')]/div[last()]",
+	        // Fallback: sometimes coupon status shows as “You saved ₹500 extra”
+	        "//p[contains(@class,'acc_details_status')]"
+	    };
+	    for (String xp : xps) {
+	        String txt = safeGetTextDriver(xp);
+	        if (txt != null && !txt.trim().isEmpty()) {
+	            double v = safeParseDouble(txt); // strips ₹ and “-”
+	            if (v > 0) return v;
+	        }
+	    }
+	    return 0;
 	}
 
 	private double applyThreadsIfNotApplied() {
@@ -305,8 +328,10 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 		double express = getExpressCharge();
 		double customization = getCustomizationCharge();
 		double flatDiscount = getFlatDiscount();
-		double coupon = applyCouponIfNotApplied();
-		double threads = applyThreadsIfNotApplied();
+
+		applyCouponIfNotApplied();                 // ensure a coupon is applied (once)
+		double coupon = getCurrentCouponDiscount(); // ✅ always refreshed each stage
+		double threads = applyThreadsIfNotApplied();// ✅ stable (per your rule)
 
 		// 🔹 Step 2 — Price breakdown
 		double finalSaved = totalYouSaved + flatDiscount + coupon + threads;
