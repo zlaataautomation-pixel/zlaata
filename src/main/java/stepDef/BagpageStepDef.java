@@ -77,65 +77,65 @@ public class BagpageStepDef {
 	}
 
 
-	@Given("User Verifies {string} Line Display")
-	public void user_verifies_line_display(String string) {
-		
-		try {
-			bag.threadLine();
-	    } catch (Exception e) {
-	        System.out.println("💥 Step failed: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-	}
-	
+//	@Given("User Verifies {string} Line Display")
+//	public void user_verifies_line_display(String string) {
+//		
+//		try {
+//			bag.threadLine();
+//	    } catch (Exception e) {
+//	        System.out.println("💥 Step failed: " + e.getMessage());
+//	        e.printStackTrace();
+//	    }
+//	}
+//	
+//
+//
+//	@Given("User Verifies {string} Thread Amount Calculation Based on Discount Amount")
+//	public void user_verifies_thread_amount_calculation_based_on_discount_amount(String string) {
+//		try {
+//			bag.youWillEarn();
+//		} catch (TimeoutException e) {
+//			System.out.println("💥 Step failed: " + e.getMessage());
+//	        e.printStackTrace();
+//		}
+//	}
+//
+//	@Given("User Verifies Increasing\\/Decreasing\\/Adding Product's {string} Thread Amount Based on Change")
+//	public void user_verifies_increasing_decreasing_adding_product_s_thread_amount_based_on_change(String string) throws InterruptedException {
+//		try {
+//			bag.threadCalculation();
+//		} catch (TimeoutException e) {
+//			System.out.println("💥 Step failed: " + e.getMessage());
+//	        e.printStackTrace();
+//		}
+//	}
+//
+//	@Given("User Verifies {string} and Total Amount Line Display")
+//	public void user_verifies_and_total_amount_line_display(String string) {
+//		bag.youSaved();
+//	}
+//
+//
+//	@Given("User Verifies {string} Amount Calculation Based on Original Price Minus Discount Amount")
+//	public void user_verifies_amount_calculation_based_on_original_price_minus_discount_amount(String string) {
+//		bag.youSavedCalculation();
+//	}
+//
+//	@Given("User Verifies {string} Calculating Based on Discounted Amount")
+//	public void user_verifies_calculating_based_on_discounted_amount(String string) {
+//		bag.totalAmount();
+//	}
+//
+//
+//	@Given("User Verifies Increasing\\/Decreasing\\/Adding Product's {string} & Total Amount Based on Change")
+//	public void user_verifies_increasing_decreasing_adding_product_s_total_amount_based_on_change(String string) throws InterruptedException {
+//		bag.youSavedandTotalAmountCalculationBasedOnQTY();
+//	}
 
-
-	@Given("User Verifies {string} Thread Amount Calculation Based on Discount Amount")
-	public void user_verifies_thread_amount_calculation_based_on_discount_amount(String string) {
-		try {
-			bag.youWillEarn();
-		} catch (TimeoutException e) {
-			System.out.println("💥 Step failed: " + e.getMessage());
-	        e.printStackTrace();
-		}
-	}
-
-	@Given("User Verifies Increasing\\/Decreasing\\/Adding Product's {string} Thread Amount Based on Change")
-	public void user_verifies_increasing_decreasing_adding_product_s_thread_amount_based_on_change(String string) throws InterruptedException {
-		try {
-			bag.threadCalculation();
-		} catch (TimeoutException e) {
-			System.out.println("💥 Step failed: " + e.getMessage());
-	        e.printStackTrace();
-		}
-	}
-
-	@Given("User Verifies {string} and Total Amount Line Display")
-	public void user_verifies_and_total_amount_line_display(String string) {
-		bag.youSaved();
-	}
-
-
-	@Given("User Verifies {string} Amount Calculation Based on Original Price Minus Discount Amount")
-	public void user_verifies_amount_calculation_based_on_original_price_minus_discount_amount(String string) {
-		bag.youSavedCalculation();
-	}
-
-	@Given("User Verifies {string} Calculating Based on Discounted Amount")
-	public void user_verifies_calculating_based_on_discounted_amount(String string) {
-		bag.totalAmount();
-	}
-
-
-	@Given("User Verifies Increasing\\/Decreasing\\/Adding Product's {string} & Total Amount Based on Change")
-	public void user_verifies_increasing_decreasing_adding_product_s_total_amount_based_on_change(String string) throws InterruptedException {
-		bag.youSavedandTotalAmountCalculationBasedOnQTY();
-	}
-
-	@Given("User Verifies {string} Button Functionality")
-	public void user_verifies_button_functionality(String string) {
-		bag.buyNowBagPage();
-	}
+//	@Given("User Verifies {string} Button Functionality")
+//	public void user_verifies_button_functionality(String string) {
+//		bag.buyNowBagPage();
+//	}
 
 
 

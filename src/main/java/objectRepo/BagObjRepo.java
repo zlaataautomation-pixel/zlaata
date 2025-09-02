@@ -7,10 +7,10 @@ import basePage.BasePage;
 
 public abstract class BagObjRepo extends BasePage
 {
-	@FindBy(xpath ="//button[@class='Cls_cart_btn Cls_redirect_restrict']")
+	@FindBy(xpath ="//a[@class='Cls_cart_btn Cls_redirect_restrict']")
 	protected WebElement bagIcon;
 	
-	@FindBy(xpath ="//span[@class='bag_prod_count']")
+	@FindBy(xpath ="//span[@class='checkout_prod_count Cls_checkout_prod_count']")
 	protected WebElement bagItemCount;
 	
 	@FindBy(xpath ="//a[@class='empty_cart_continue_btn btn___2']")

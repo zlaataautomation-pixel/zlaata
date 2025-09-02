@@ -39,7 +39,7 @@ public final class BagPage extends BagObjRepo {
 			Common.waitForElement(2);
 			WebElement bagContinueShop = driver.findElement(By.xpath("//a[@class='empty_cart_continue_btn btn___2']"));
 			if (bagContinueShop.isDisplayed()) {
-				click(closeBag);
+//				click(closeBag);
 				ProductListingPage pLp = new ProductListingPage(driver);
 				pLp.addToCart();
 				Common.waitForElement(5);
@@ -105,11 +105,11 @@ public final class BagPage extends BagObjRepo {
 		}
 
 		// STEP 3: Close the bag after all items moved
-		try {
-			click(closeBag);
-		} catch (Exception e) {
-			System.out.println("ℹ️ Close bag button not available or already closed.");
-		}
+//		try {
+//			click(closeBag);
+//		} catch (Exception e) {
+//			System.out.println("ℹ️ Close bag button not available or already closed.");
+//		}
 
 		// STEP 4: Navigate to Wishlist page
 		try {
@@ -147,7 +147,6 @@ public final class BagPage extends BagObjRepo {
 		if (finalBagCount.isEmpty()) {
 
 			System.out.println("🛒 Adding product to check if bag count displays...");
-			click(closeBag);
 			// Add product again to verify count shows up
 			ProductListingPage product = new ProductListingPage(driver);
 			product.addToCart();
@@ -216,7 +215,6 @@ public final class BagPage extends BagObjRepo {
 		if (finalBagCount.isEmpty()) {
 
 			System.out.println("🛒 Adding product to check if bag count displays...");
-			click(closeBag);
 			// Add product again to verify count shows up
 			ProductListingPage product = new ProductListingPage(driver);
 			product.addToCart();
@@ -306,8 +304,7 @@ public final class BagPage extends BagObjRepo {
 		System.out.println("🛍️ Total products in Bag: " + products.size());
 
 		if (products.isEmpty()) {
-
-			click(closeBag);
+			
 			System.out.println("🛒 Adding product to the bag...");
 
 			// Add product again to verify count shows up
@@ -481,7 +478,6 @@ public final class BagPage extends BagObjRepo {
 		// Add a product if bag is empty
 		if (isBagEmpty()) {
 			System.out.println("👜 Bag is empty. Adding a product.");
-			click(closeBag);
 			addProductToBag();
 			click(bagIcon);
 		}
@@ -502,7 +498,6 @@ public final class BagPage extends BagObjRepo {
 
 					if (!isCountAvailable()) {
 						System.out.println("🛍️ No count found. Adding new product...");
-						click(closeBag);
 						addProductToBag();
 						click(bagIcon);
 
@@ -1197,7 +1192,6 @@ public final class BagPage extends BagObjRepo {
 
 			if (products.isEmpty()) {
 				System.out.println("👜 Bag is empty. Adding product...");
-				click(closeBag);
 				Actions actions = new Actions(driver);
 				actions.moveToElement(shopMenu);
 				actions.moveToElement(category).click().build().perform();

@@ -218,7 +218,7 @@ public abstract class CouponObjRepo extends BasePage {
 	@FindBy(xpath = "//button[@class=' prod_add_cart_btn btn___1 Cls_Cart_Prod Cls_Single_Cart']")
 	protected WebElement addCartButton;
 
-	@FindBy(xpath ="//button[@class='Cls_cart_btn Cls_redirect_restrict']")
+	@FindBy(xpath ="//a[@class='Cls_cart_btn Cls_redirect_restrict']")
 	protected WebElement bagIcon;
 
 	@FindBy(xpath ="//button[.='Buy Now']")
