@@ -110,8 +110,8 @@ public abstract class CouponObjRepo extends BasePage {
 	@FindBy(xpath = "//div[@class='navigation_cta_icon_list account_icon_btn open__popup ']")
 	protected WebElement profile;
 	
-	@FindBy(xpath = "//a[.='Account Settings']")
-	protected WebElement accountsSideMenuButton;
+	@FindBy(xpath = "//a[@class='account_sidebar_user_profile_link']")
+	protected WebElement myProfileIcon;
 	
 	@FindBy(name = "email")
 	protected WebElement accountEmailInput;
@@ -218,7 +218,7 @@ public abstract class CouponObjRepo extends BasePage {
 	@FindBy(xpath = "//button[@class=' prod_add_cart_btn btn___1 Cls_Cart_Prod Cls_Single_Cart']")
 	protected WebElement addCartButton;
 
-	@FindBy(xpath ="//a[@class='Cls_cart_btn Cls_redirect_restrict']")
+	@FindBy(xpath ="//button[@class='Cls_cart_btn Cls_redirect_restrict']")
 	protected WebElement bagIcon;
 
 	@FindBy(xpath ="//button[.='Buy Now']")

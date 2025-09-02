@@ -322,7 +322,7 @@ public final class CouponPage extends CouponObjRepo {
 	 */
 	public void verifyEmailInAccountSettingsAndSubmitOTP() {
 		click(profile);
-		new Actions(driver).moveToElement(accountsSideMenuButton).click().perform();
+		new Actions(driver).moveToElement(myProfileIcon).click().perform();
 
 		// Enter the same email generated during feedback
 		type(accountEmailInput, getLastGeneratedEmail());
