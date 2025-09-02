@@ -22,13 +22,19 @@ public class CheckOutPageStepDef {
 	@Given("User Verifies Checkout page calculation")
 	public void user_verifies_checkout_page_calculation() {
 		cOp.verifyCheckoutCalculationsWithExcel();
-		
+
 
 	}
-	@Given("User Verifies cOp Item Count")
-	public void user_verifies_cOp_item_count(){
+
+
+
+	@Given("User Verifies Bag Item Count")
+	public void user_verifies_bag_item_count() {
 		cOp.itemCount();
 	}
+
+
+
 
 	@Given("User Verifies Display of Wishlist Button")
 	public void user_verifies_display_of_wishlist_button() throws TimeoutException {
@@ -38,13 +44,13 @@ public class CheckOutPageStepDef {
 	@Given("User Verifies Display of Delete Button")
 	public void user_verifies_display_of_delete_button() {
 		try {
-	        cOp.bagDelete();
-	    } catch (Exception e) {
-	        System.out.println("💥 Step failed: " + e.getMessage());
-	        e.printStackTrace();
-	    }
-		
-			
+			cOp.bagDelete();
+		} catch (Exception e) {
+			System.out.println("💥 Step failed: " + e.getMessage());
+			e.printStackTrace();
+		}
+
+
 	}
 
 
@@ -72,13 +78,13 @@ public class CheckOutPageStepDef {
 
 	@Given("User Verifies That Adding New Product or Deleting Product Count Increases or Decreases")
 	public void user_verifies_that_adding_new_product_or_deleting_product_count_increases_or_decreases() throws InterruptedException {
-		
-//		try {
-//			cOp.verifyItemCountChanges();
-//	    } catch (Exception e) {
-//	        System.out.println("💥 Step failed: " + e.getMessage());
-//	        e.printStackTrace();
-//	    }
+
+		//		try {
+		//			cOp.verifyItemCountChanges();
+		//	    } catch (Exception e) {
+		//	        System.out.println("💥 Step failed: " + e.getMessage());
+		//	        e.printStackTrace();
+		//	    }
 		cOp.verifyItemCountChanges();
 	}
 
