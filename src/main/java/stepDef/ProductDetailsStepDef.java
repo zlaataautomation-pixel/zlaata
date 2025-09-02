@@ -211,6 +211,13 @@ public class ProductDetailsStepDef {
 		pDP.ReviewPopupWithoutEnterAllDataClickOnS();
 	}
 
+		@Given("User on Product details page and gives a review")
+	public void user_on_product_details_page_and_gives_a_review() {
+			home.homeLaunch();
+			pDP.ReviewPopupEnterAllData();
+		
+	}
+
 
 
 

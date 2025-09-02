@@ -277,7 +277,10 @@ public abstract class ProductDetailsPageObjRepo extends BasePage
    @FindBy(xpath = "//div[@class='suggested_for_you_section common_card_section Cls_suggested_for_you_section']//a[@class='common_section_view_all_btn']")
    protected WebElement suggestedForYouSectionViewAllButton;
    
-   @FindBy(xpath = "//div[@class='more_for_you_section common_card_section Cls_more_for_you_section']//div[@class='common_section_header']")
-   protected    WebElement moreForYouSectionText;
+   @FindBy(xpath = "//div[@class='order_review_cont']//*[@class='order_review_star Cls_order_review_star']")
+   protected WebElement starCount;
+   
+   @FindBy(xpath = "//div[@class='snackbar-container  snackbar-pos top-right']")
+   protected WebElement reviewSuccessMessage;
    
 }
