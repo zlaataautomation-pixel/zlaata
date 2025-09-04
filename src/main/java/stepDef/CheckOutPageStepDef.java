@@ -70,11 +70,12 @@ public class CheckOutPageStepDef {
 	public void user_verifies_user_can_add_new_product() {
 		cOp.newProductToBag();
 	}
-
-	@Given("User Verifies That Adding Product to cOp Count is Displaying or Not Above cOp Icon")
-	public void user_verifies_that_adding_product_to_cOp_count_is_displaying_or_not_above_cOp_icon() {
+	
+	@Given("User Verifies That Adding Product to Bag Count is Displaying or Not Above Bag Icon")
+	public void user_verifies_that_adding_product_to_bag_count_is_displaying_or_not_above_bag_icon() {
 		cOp.verifyBagCount();
 	}
+
 
 	@Given("User Verifies That Adding New Product or Deleting Product Count Increases or Decreases")
 	public void user_verifies_that_adding_new_product_or_deleting_product_count_increases_or_decreases() throws InterruptedException {
