@@ -15,7 +15,8 @@ import java.util.logging.Logger;
 features = {"src/test/resources/features/CheckoutPage"},
 glue = "stepDef",	
 monochrome = true,	
-dryRun = false
+dryRun = false,
+tags="@TC_UI_Zlaata_COP_01"
 
 )
 

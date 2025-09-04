@@ -50,22 +50,22 @@ public class Hooks {
 	private long startTime;
 	public static ThreadLocal<Throwable> lastError = new ThreadLocal<>();
 
-	private String extractFeatureName(Scenario scenario) {
-        try {
-            // Example: "features/signup.feature:5"
-            String id = scenario.getId();
-            if (id != null && id.contains(":")) {
-                String path = id.split(":")[0]; // features/signup.feature
-                String[] parts = path.replace("\\", "/").split("/");
-                String nameWithExt = parts[parts.length - 1]; // signup.feature
-                
-                return nameWithExt.replace(".feature", "").trim(); // signup
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "UnknownFeature";
-    }
+//	private String extractFeatureName(Scenario scenario) {
+//        try {
+//            // Example: "features/signup.feature:5"
+//            String id = scenario.getId();
+//            if (id != null && id.contains(":")) {
+//                String path = id.split(":")[0]; // features/signup.feature
+//                String[] parts = path.replace("\\", "/").split("/");
+//                String nameWithExt = parts[parts.length - 1]; // signup.feature
+//                
+//                return nameWithExt.replace(".feature", "").trim(); // signup
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return "UnknownFeature";
+//    }
 
 
 	@Before(order=0)
@@ -152,45 +152,45 @@ public class Hooks {
 //
 //	}
 
-	public static void attachFullPageScreenshot(WebDriver driver) {
-		boolean takeScreenshotForAll = FileReaderManager.getInstance().getConfigReader()
-				.isScreenShotRequiredForAllScenario();
-		System.out.println("Scenario Name :: " + Hooks.scenarioName);
-
-		if (takeScreenshotForAll) {
-			String[] subStrings = Hooks.scenarioName.split("\\|");
-			String tcID = subStrings[0].trim();
-
-			if ((tcID.split("_")[1]).contains("UI")) {
-				try {
-					// Ensure the driver is augmented to take full page screenshots
-					WebDriver augmentedDriver = new Augmenter().augment(driver);
-
-					// This takes a full page screenshot from the driver and saves it to the
-					// specified location
-					File sourcePath = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
-					String filePath = System.getProperty("user.dir") + "/target/cucumber-reports/screenshots/";
-					Common.createDirIfNotExists(filePath);
-					File destinationPath = new File(filePath + File.separator + tcID + "-"
-							+ DateUtils.getCurrentLocalDateTimeStamp("yyyyMMddHHmmssSSS") + ".png");
-
-					// Copy the taken screenshot from source location to destination location
-					FileHandler.copy(sourcePath, destinationPath);
-
-					// Attach the specified screenshot to the test
-					//					Reporter.addScreenCaptureFromPath(destinationPath.toString());
-
-					System.out.println("Screenshot taken: " + destinationPath.toString());
-				} catch (IOException e) {
-					throw new RuntimeException("Some exceptions occurred while taking screenshot!!! Please check ", e);
-				}
-			} else {
-				System.out.println("Scenario ID does not contain 'UI'. No screenshot taken.");
-			}
-		} else {
-			System.out.println("Scenario passed!!!! No Screen capture required!!!");
-		}
-	}	
+//	public static void attachFullPageScreenshot(WebDriver driver) {
+//		boolean takeScreenshotForAll = FileReaderManager.getInstance().getConfigReader()
+//				.isScreenShotRequiredForAllScenario();
+//		System.out.println("Scenario Name :: " + Hooks.scenarioName);
+//
+//		if (takeScreenshotForAll) {
+//			String[] subStrings = Hooks.scenarioName.split("\\|");
+//			String tcID = subStrings[0].trim();
+//
+//			if ((tcID.split("_")[1]).contains("UI")) {
+//				try {
+//					// Ensure the driver is augmented to take full page screenshots
+//					WebDriver augmentedDriver = new Augmenter().augment(driver);
+//
+//					// This takes a full page screenshot from the driver and saves it to the
+//					// specified location
+//					File sourcePath = ((TakesScreenshot) augmentedDriver).getScreenshotAs(OutputType.FILE);
+//					String filePath = System.getProperty("user.dir") + "/target/cucumber-reports/screenshots/";
+//					Common.createDirIfNotExists(filePath);
+//					File destinationPath = new File(filePath + File.separator + tcID + "-"
+//							+ DateUtils.getCurrentLocalDateTimeStamp("yyyyMMddHHmmssSSS") + ".png");
+//
+//					// Copy the taken screenshot from source location to destination location
+//					FileHandler.copy(sourcePath, destinationPath);
+//
+//					// Attach the specified screenshot to the test
+//					//					Reporter.addScreenCaptureFromPath(destinationPath.toString());
+//
+//					System.out.println("Screenshot taken: " + destinationPath.toString());
+//				} catch (IOException e) {
+//					throw new RuntimeException("Some exceptions occurred while taking screenshot!!! Please check ", e);
+//				}
+//			} else {
+//				System.out.println("Scenario ID does not contain 'UI'. No screenshot taken.");
+//			}
+//		} else {
+//			System.out.println("Scenario passed!!!! No Screen capture required!!!");
+//		}
+//	}	
 
 
 	//	@After(order = 2)
@@ -270,7 +270,7 @@ public class Hooks {
 	        } catch (Exception e) {
 	            StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
 	            for (StackTraceElement element : stackTrace) {
-	                if (element.getClassName().contains("StepDefs")) { // adjust as per your package
+	                if (element.getClassName().contains("StepDef")) { 
 	                    ExceptionTracker.lastError.set(e);
 	                    break;
 	                }
