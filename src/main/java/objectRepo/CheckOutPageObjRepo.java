@@ -140,4 +140,35 @@ public abstract class CheckOutPageObjRepo extends BasePage {
 
 	@FindBy(xpath = "//button[@class='place_order_btn Cls_place_order btn___2 ']")
 	protected WebElement placeOrderButton;
+	
+	
+	
+	@FindBy(xpath = "//label[@for='suggestion_filter_accessories']")
+	protected WebElement accessoriesButton ;
+	
+	@FindBy(xpath = "//label[@for='suggestion_filter_recentlyViewed']")
+	protected WebElement recentlyViewed ;
+	
+	@FindBy(xpath = "//label[@for='suggestion_filter_topSelling']")
+	protected WebElement topSelling; ;
+
+	@FindBy(xpath = "//*[@class='swiper-button-next cart_suggestion_accessories_next']")
+	protected WebElement accessoriesButtonForwardArrow;
+	
+	@FindBy(xpath = "//*[@class='swiper-button-prev cart_suggestion_accessories_prev']")
+	protected WebElement  accessoriesButtonBackwardArrow;
+	
+	@FindBy(xpath = "//*[@class='swiper-button-next cart_suggestion_top-selling_next']")
+	protected WebElement topSellingForwardArrow;
+	
+	@FindBy(xpath = "//*[@class='swiper-button-prev cart_suggestion_top-selling_prev']")
+	protected WebElement topSellingBackwardArrow;
+	
+	@FindBy(xpath = "//*[@class='swiper-button-next cart_suggestion_recently_viewed_next']")
+	protected WebElement recentlyViewedForwardArrow;
+	
+	@FindBy(xpath ="//*[@class='swiper-button-prev cart_suggestion_recently_viewed_prev']" )
+	protected WebElement recentlyViewedBackwardArrow;
+	
+
 }

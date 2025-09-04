@@ -16,6 +16,7 @@ features = {"src/test/resources/features/CheckoutPage"},
 glue = "stepDef",	
 monochrome = true,	
 dryRun = false
+
 )
 
 		

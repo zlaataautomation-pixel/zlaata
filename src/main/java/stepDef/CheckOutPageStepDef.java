@@ -89,5 +89,12 @@ public class CheckOutPageStepDef {
 	}
 
 
+	@Given("the user verifies that on the Checkout page the Accessories button, the Recently Viewed button, and the Top Selling button are all visible and clickable")
+public void the_user_verifies_that_on_the_checkout_page_the_accessories_button_the_recently_viewed_button_and_the_top_selling_button_are_all_visible_and_clickable() {
+	
+		cOp.allButtonOnCheckoutPage();
+}
+
+
 
 }

@@ -917,11 +917,82 @@ public final class CheckoutPage extends CheckOutPageObjRepo{
 		}
 	}
 
+	public void allButtonOnCheckoutPage() {
+	    HomePage home = new HomePage(driver);
+	    home.homeLaunch();
 
-	
+	    ProductDetailsPage pDP = new ProductDetailsPage(driver);
+	    Common.waitForElement(5);
 
+	    // Perform Buy Now
+	    pDP.buyNow(Hooks.getScenario());
 
-	private boolean isBagEmpty() {
+	    ((JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight/2);");
+	    Common.waitForElement(2);
+	    ((JavascriptExecutor) driver).executeScript("window.scrollBy(0, -400);");
+	    Common.waitForElement(2);
+
+	    CheckoutPage checkout = new CheckoutPage(driver);
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	    Actions actions = new Actions(driver);
+	    JavascriptExecutor js = (JavascriptExecutor) driver;
+
+	    // ================== Accessories ==================
+	    wait.until(ExpectedConditions.elementToBeClickable(checkout.accessoriesButton));
+	    checkout.accessoriesButton.click();
+	    System.out.println("✅ Accessories clicked (default selected)");
+	    Common.waitForElement(1);
+
+	    clickForwardBackwardArrow(checkout.accessoriesButtonForwardArrow, checkout.accessoriesButtonBackwardArrow, "Accessories", wait, js, actions);
+
+	    // ================== Recently Viewed ==================
+	    wait.until(ExpectedConditions.elementToBeClickable(checkout.recentlyViewed));
+	    checkout.recentlyViewed.click();
+	    System.out.println("✅ Recently Viewed clicked");
+	    Common.waitForElement(1);
+
+	    clickForwardBackwardArrow(checkout.recentlyViewedForwardArrow, checkout.recentlyViewedBackwardArrow, "Recently Viewed", wait, js, actions);
+
+	    // ================== Top Selling ==================
+	    wait.until(ExpectedConditions.elementToBeClickable(checkout.topSelling));
+	    checkout.topSelling.click();
+	    System.out.println("✅ Top Selling clicked");
+	    Common.waitForElement(1);
+
+	    clickForwardBackwardArrow(checkout.topSellingForwardArrow, checkout.topSellingBackwardArrow, "Top Selling", wait, js, actions);
+	}
+
+	/**
+	 * Click forward & backward arrow if present & active
+	 */
+	private void clickForwardBackwardArrow(WebElement forward, WebElement backward, String section, WebDriverWait wait, JavascriptExecutor js, Actions actions) {
+	    try {
+	        if (forward.isDisplayed() && forward.isEnabled()) {
+	            try {
+	                wait.until(ExpectedConditions.elementToBeClickable(forward)).click();
+	                System.out.println("⚠️ " + section + " forward arrow clicked.");
+	            } catch (Exception e) {
+	                actions.moveToElement(forward).click().build().perform();
+	                System.out.println("⚠️ " + section + " forward arrow clicked via Actions.");
+	            }
+
+	            try {
+	                wait.until(ExpectedConditions.elementToBeClickable(backward)).click();
+	                System.out.println("⬅️ " + section + " backward arrow clicked.");
+	            } catch (Exception e) {
+	                System.out.println("ℹ️ " + section + " backward arrow not clickable → Products less.");
+	            }
+
+	        } else {
+	            System.out.println("ℹ️ " + section + " arrows not available → Products less.");
+	        }
+	    } catch (Exception e) {
+	        System.out.println("ℹ️ " + section + " arrows not available → Products less.");
+	    }
+	}
+
+		  
+		   boolean isBagEmpty() {
 		return driver.findElements(By.xpath("//span[@class='checkout_prod_count Cls_checkout_prod_count']")).isEmpty();
 	}
 

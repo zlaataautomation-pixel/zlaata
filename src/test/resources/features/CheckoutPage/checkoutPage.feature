@@ -58,7 +58,7 @@ Feature: CheckOut Page Feature
       | TD_UI_Zlaata_COP_06     |
 
    @TC_UI_Zlaata_COP_07
-  Scenario Outline: TC_UI_Zlaata_COP_07 |Verify That Adding Product to Bag Count is Displaying or Not Above Bag Icon|"<TD_ID>"
+  Scenario Outline: TC_UI_Zlaata_COP_07 Verify That Adding Product to Bag Count is Displaying or Not Above Bag Icon|"<TD_ID>"
     Given User Verifies That Adding Product to Bag Count is Displaying or Not Above Bag Icon
 
     Examples:
@@ -75,11 +75,21 @@ Feature: CheckOut Page Feature
       
       
   @TC_UI_Zlaata_COP_09
-  Scenario Outline: TC_UI_Zlaata_COP_09 |Verify That Calculation Functionality is Working|"<TD_ID>"
+  Scenario Outline: TC_UI_Zlaata_COP_09 |Verify That "Place Order" Button Functionality is Working|"<TD_ID>"
     Given User Verifies Checkout page calculation
 
     Examples:
       | TD_ID                  |
       | TD_UI_Zlaata_COP_09     |
+      
+      @TC_UI_Zlaata_COP_10
+Scenario Outline: TC_UI_Zlaata_COP_10 |Verify Accessories, Recently Viewed, and Top Selling buttons on Checkout page| "<TD_ID>"
+  Given the user verifies that on the Checkout page the Accessories button, the Recently Viewed button, and the Top Selling button are all visible and clickable
+
+  Examples:
+    | TD_ID               |
+    | TD_UI_Zlaata_COP_10 |
+
+      
 
   
