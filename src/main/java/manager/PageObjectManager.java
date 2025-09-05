@@ -27,7 +27,7 @@ public class PageObjectManager {
     private ProductDetailsPage pDP;
     private SearchSectionPage search;
     private CouponPage coupon;
-   
+    private AdminPanelPage admin;
    
 
     public PageObjectManager(WebDriver driver) {
@@ -100,6 +100,11 @@ public class PageObjectManager {
 	}
 	public CouponPage getCouponPage() {
         return (coupon == null) ? coupon = new CouponPage(driver) : coupon;
+    
+	}
+	
+	public AdminPanelPage getAdminPanelPage() {
+        return (admin == null) ? admin = new AdminPanelPage(driver) : admin;
     
 	}
 	
